@@ -1,52 +1,5 @@
 #include "shell.h"
 
-/**
- * split_str - Splits a string.
- * 
- * @s: String to be splitted.
- * Return: An array of words.
-*/
-/*
-char **split_str(char *s)
-{
-  char **splitted = malloc(sizeof(char) * strlen(s));
-  unsigned int i = 0, a = 0;
-
-  if (!splitted)
-    return (NULL);
-
-  for (; s[i]; i++)
-  {
-    if (s[i] == ' ')
-    {
-      a++;
-      continue;
-    }
-    splitted[a][i] = s[i];
-  }
-
-  return (splitted);
-}
-*/
-/**
- * split_str - Splits a string.
- * @s: String to be splitted.
- *
- * Return: Void
-*/
-void split_str(char *str)
-{
-  const char *delim = " ";         /* Delimiter */
-  char *tok;
-
-  tok = strtok(str, delim);         /* Get first token */
-
-  while (tok != NULL)               /* Check for delimiters */
-  {
-      printf("%s\n", tok);          /* Print the word followed by a new line */
-      tok = strtok(NULL, delim);    /* Go through other tokens */
-  }
-}
 
 
 /**
@@ -57,12 +10,20 @@ void split_str(char *str)
 */
 void call_command(char *command)
 {
-  char *argv[] = {"", NULL};
+  char **argv = split_str(command);
+  pid_t pid;
+  int status;
+  pid = fork();
 
-  if (execve(command, argv, NULL) == -1)
-  {
+  if (pid == -1)
     perror("Error");
+  else if (pid == 0)
+  {
+    if (execve(command, argv, NULL) == -1)
+      perror("Error");
   }
+  else
+    waitpid(pid, &status, 0);
 }
 
 /**
