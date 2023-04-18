@@ -6,6 +6,7 @@
  * @s: String to be splitted.
  * Return: An array of words.
 */
+/*
 char **split_str(char *s)
 {
   char **splitted = malloc(sizeof(char) * strlen(s));
@@ -26,6 +27,27 @@ char **split_str(char *s)
 
   return (splitted);
 }
+*/
+/**
+ * split_str - Splits a string.
+ * @s: String to be splitted.
+ *
+ * Return: Void
+*/
+void split_str(char *str)
+{
+  const char *delim = " ";         /* Delimiter */
+  char *tok;
+
+  tok = strtok(str, delim);         /* Get first token */
+
+  while (tok != NULL)               /* Check for delimiters */
+  {
+      printf("%s\n", tok);          /* Print the word followed by a new line */
+      tok = strtok(NULL, delim);    /* Go through other tokens */
+  }
+}
+
 
 /**
  * call_command - Call an executable
@@ -72,6 +94,7 @@ int read_line(){
 
     buffer[chars_read - 1] = '\0';
     call_command(buffer);
+    split_str(buffer);
   }
 
   free(buffer);
