@@ -11,5 +11,14 @@
 #include <stdio.h>
 #include <string.h>
 
+/* main.c */
+int read_lines();
+
+/* command_manager.c */
+void call_command(char *command);
+
+/* string_utils.c */
+char **split_str(char *str);
+int str_count_words(char *s, const char *delim);
 
 #endif
