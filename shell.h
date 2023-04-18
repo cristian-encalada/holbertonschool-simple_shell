@@ -11,11 +11,22 @@
 #include <stdio.h>
 #include <string.h>
 
+typedef struct command{
+  char *cmd;
+  void (*f)();
+} command_t;
+
+/* custom_commands */
+void exit_cmd();
+void env_cmd();
+
 /* main.c */
 int read_lines();
 
 /* command_manager.c */
 void call_command(char *command);
+int ex_builtin(char *command);
+int ex_path(char **argv);
 
 /* string_utils.c */
 char **split_str(char *str);
