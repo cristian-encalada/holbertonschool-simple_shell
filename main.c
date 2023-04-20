@@ -9,6 +9,11 @@
 */
 int main()
 {
+	signal(SIGINT, SIG_IGN);
+
+	/* Disable Ctrl-C terminal interrupt */
+  system("stty -echoctl");
+
 	read_lines();
 	return (0);
 }
