@@ -13,22 +13,22 @@
 
 typedef struct command{
 	char *cmd;
-	void (*f)();
+	void (*f)(char **args);
 } command_t;
 
 char *buffer;
 
 /* custom_commands */
-void exit_cmd();
-void env_cmd();
-void clear_cmd();
+void exit_cmd(char **args);
+void env_cmd(char **args);
+void clear_cmd(char **args);
 
 /* main.c */
 int read_lines();
 
 /* command_manager.c */
 void call_command(char *command);
-int ex_builtin(char *command);
+int ex_builtin(char *command, char **args);
 int ex_path(char **argv);
 
 /* string_utils.c */

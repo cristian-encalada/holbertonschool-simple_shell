@@ -70,7 +70,7 @@ int ex_path(char **argv)
  * @command: Command name.
  * Return: 1 on Success, -1 on Error.
 */
-int ex_builtin(char *command)
+int ex_builtin(char *command, char **args)
 {
 	command_t commands[] = {
 		{"exit", exit_cmd},
@@ -84,7 +84,7 @@ int ex_builtin(char *command)
 	{
 		if (strcmp(command, commands[i].cmd) == 0)
 		{
-			commands[i].f();
+			commands[i].f(args);
 			return (1);
 		}
 			
@@ -105,7 +105,7 @@ void call_command(char *command)
 	pid_t pid;
 
 	/* Check if the cmd is built-in */
-	if (ex_builtin(argv[0]) == 1)
+	if (ex_builtin(argv[0], argv) == 1)
 	{
 		free_array(argv);
 		return;

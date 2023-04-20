@@ -5,8 +5,9 @@
  * 
  * Return: void.
 */
-void clear_cmd()
+void clear_cmd(char **args)
 {
+	(void) args;
 	system("printf '\033[H\033[J'");
 }
 
@@ -15,10 +16,15 @@ void clear_cmd()
  * 
  * Return: void.
 */
-void exit_cmd()
+void exit_cmd(char **args)
 {
+	int status = 0;
+
 	free(buffer);
-	exit(0);
+
+	if (args[0] != NULL)
+		status = atoi(args[1]);
+	exit(status);
 }
 
 /**
@@ -26,11 +32,12 @@ void exit_cmd()
  * 
  * Return: void.
 */
-void env_cmd()
+void env_cmd(char **args)
 {
 	unsigned int i = 0;
 	extern char **environ;
 
+	(void) args;
 	for (; environ[i] != NULL; i++)
 	{
 		printf("%s\n", environ[i]);
