@@ -16,6 +16,8 @@ typedef struct command{
 	void (*f)();
 } command_t;
 
+char *buffer;
+
 /* custom_commands */
 void exit_cmd();
 void env_cmd();

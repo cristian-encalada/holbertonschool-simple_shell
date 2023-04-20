@@ -52,6 +52,7 @@ char **split_str(char *str)
 	array[count] = NULL;
 
 	free(copy);  /* Free the copy of the input string */
+	
 	return (array);
 }
 

@@ -6,6 +6,7 @@
  * Return: void.
 */
 void exit_cmd(){
+	free(buffer);
 	exit(0);
 }
 

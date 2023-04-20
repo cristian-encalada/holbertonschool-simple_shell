@@ -20,7 +20,6 @@ int main()
 */
 int read_lines()
 {
-	char *buffer;
 	size_t bufsize = 1024;
 	int chars_read = 0;
 
