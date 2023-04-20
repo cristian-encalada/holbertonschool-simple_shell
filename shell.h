@@ -21,6 +21,7 @@ char *buffer;
 /* custom_commands */
 void exit_cmd();
 void env_cmd();
+void clear_cmd();
 
 /* main.c */
 int read_lines();

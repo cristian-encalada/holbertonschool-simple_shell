@@ -75,6 +75,7 @@ int ex_builtin(char *command)
 	command_t commands[] = {
 		{"exit", exit_cmd},
 		{"env", env_cmd},
+		{"clear", clear_cmd},
 		{NULL, NULL}
 	};
 	unsigned int i = 0;
