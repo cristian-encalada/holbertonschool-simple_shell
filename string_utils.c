@@ -57,3 +57,25 @@ int str_count_words(char *s, const char *delim)
   }
   return (numWords);
 }
+
+/**
+ * _getline - Read a line into string
+ * @str: string
+ * @lim: limit of the line
+ * 
+ * Return: Length
+*/
+int _getline(char *str, int lim)
+{
+  int ch, i;
+
+  for (i = 0; i < lim -1 && (ch = getchar()) != EOF && ch != '\n';i++)
+    str[i] = ch;
+  if (ch == '\n')
+  {
+    str [i] = ch;
+    i++;  
+  }
+  str [i] = '\0';
+  return (i);
+}
