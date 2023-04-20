@@ -37,13 +37,13 @@ int read_lines()
   while (1)
   {
     printf("$ ");
-    chars_read = getline(&buffer, &bufsize, stdin);
+    chars_read = _getline(buffer, bufsize); /* getline(&buffer, &bufsize, stdin); */
     
     if (buffer[chars_read - 1] != '\n'){
       printf("\n");
       exit(1);
     }
-
+    
     buffer[chars_read - 1] = '\0';
     call_command(buffer);
   }

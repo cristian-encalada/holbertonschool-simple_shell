@@ -98,7 +98,6 @@ void call_command(char *command)
 {
   char **argv = split_str(command);
   pid_t pid;
-  int status;
 
   /* Check if the cmd is built-in */
   if (ex_builtin(argv[0]) == 1)
@@ -115,8 +114,14 @@ void call_command(char *command)
   else if (pid == 0)
   {
     if (execve(argv[0], argv, NULL) == -1)
+    {
       perror("Error");
+      _exit(127);
+    }
+      
   }
   else
-    waitpid(pid, &status, 0);
+    waitpid(pid, NULL, 0);
+    
+    
 }
