@@ -32,4 +32,6 @@ int ex_path(char **argv);
 char **split_str(char *str);
 int str_count_words(char *s, const char *delim);
 
+int _getline(char *s, int lim);
+
 #endif
