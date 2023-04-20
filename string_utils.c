@@ -8,52 +8,87 @@
 */
 char **split_str(char *str)
 {
-  const char *delim = " ";         /* Delimiter */
-  char *tok;
-  char **array;
-  unsigned int len = 0, numWords = str_count_words(str, delim), count = 0, i = 0;
+	const char *delim = " ";         /* Delimiter */
+	char *tok, *copy;
+	char **array;
+	unsigned int len = 0, numWords = str_count_words(str, delim), count = 0, i = 0;
 
-  array = (char **) malloc((numWords + 1) * sizeof(char *));
+	/* Make a copy of the input string */
+	copy = strdup(str);
+	if (copy == NULL)
+		return (NULL);
 
-  if (array == NULL)
-    return (NULL);
-  
-  tok = strtok(str, delim);
+	array = (char **) malloc((numWords + 1) * sizeof(char *));
 
-  while (tok != NULL)
-  {
-    for (len = 0; tok[len]; len++)
-      ;
+	if (array == NULL)
+		return (NULL);
+	
+	tok = strtok(copy, delim);
 
-    array[count] = (char *) malloc((len + 1) * sizeof(char));
-    if (array[count] == NULL)
-      return (NULL);
+	while (tok != NULL)
+	{
+		for (len = 0; tok[len]; len++)
+			;
 
-    for (i = 0; i < len; i++)
-    {
-      array[count][i] = tok[i];
-    }
-    
-    array[count][i] = '\0';
+		array[count] = (char *) malloc((len + 1) * sizeof(char));
+		if (array[count] == NULL)
+		{
+			free_array(array);
+			free(copy);  /* Free the copy of the input string */
+			return (NULL);
+		}
 
-    count++;
-    tok = strtok(NULL, delim);
-  }
+		for (i = 0; i < len; i++)
+		{
+			array[count][i] = tok[i];
+		}
+		
+		array[count][i] = '\0';
 
-  array[count] = NULL;
-  return (array);
+		count++;
+		tok = strtok(NULL, delim);
+	}
+
+	array[count] = NULL;
+
+	free(copy);  /* Free the copy of the input string */
+	return (array);
 }
+
 
 int str_count_words(char *s, const char *delim)
 {
-  char *tok;
-  int numWords;
-  tok = strtok(strdup(s), delim);         /* Get first token */
+	char *tok;
+	int numWords = 0;
+	char *newS = strdup(s);
 
-  while (tok != NULL)               /* Check for delimiters */
-  {
-    numWords++;
-    tok = strtok(NULL, delim);    /* Go through other tokens */
-  }
-  return (numWords);
+	if (newS == NULL)
+		return (0);
+
+	tok = strtok(newS, delim);         /* Get first token */
+
+	while (tok != NULL)               /* Check for delimiters */
+	{
+		numWords++;
+		tok = strtok(NULL, delim);    /* Go through other tokens */
+	}
+
+	free(newS);
+	return (numWords);
+}
+
+/**
+ * free_array- Frees an array
+ * 
+ * @array: Array to be freed.
+ * Return: void.
+*/
+void free_array(char **arr)
+{
+	int i = 0;
+
+	for (; arr[i] != NULL; i++) {
+		free(arr[i]);
+	}
+	free(arr);
 }

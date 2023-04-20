@@ -6,7 +6,7 @@
  * Return: void.
 */
 void exit_cmd(){
-  exit(0);
+	exit(0);
 }
 
 /**
@@ -15,11 +15,11 @@ void exit_cmd(){
  * Return: void.
 */
 void env_cmd(){
-  unsigned int i = 0;
-  extern char **environ;
+	unsigned int i = 0;
+	extern char **environ;
 
-  for (; environ[i] != NULL; i++)
-  {
-    printf("%s\n", environ[i]);
-  }
+	for (; environ[i] != NULL; i++)
+	{
+		printf("%s\n", environ[i]);
+	}
 }

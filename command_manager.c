@@ -8,56 +8,60 @@
 */
 int ex_path(char **argv)
 {
-  char *path = strdup(getenv("PATH"));
-  char *dir, *full_path;
-  int len_dir, len_cmd, result;
+	char *path = strdup(getenv("PATH"));
+	char *path_copy = path;
+	char *dir, *full_path;
+	int len_dir, len_cmd, result;
 
-  if (!path || !*argv)
-    return (-1);
+	if (!path || !*argv)
+		return (-1);
 
-  len_cmd = strlen(*argv);
+	len_cmd = strlen(*argv);
 
-  while ((dir = strtok(path, ":")))
-  {
-    len_dir = strlen(dir);
-    full_path = malloc(len_dir + len_cmd + 2);
+	while ((dir = strtok(path_copy, ":")))
+	{
+		len_dir = strlen(dir);
+		full_path = malloc(len_dir + len_cmd + 2);
 
-    if (!full_path)
-      return (-1);
+		if (!full_path)
+			return (-1);
 
-    sprintf(full_path, "%s/%s", dir, *argv);
+		sprintf(full_path, "%s/%s", dir, *argv);
 
-    result = access(full_path, X_OK);
+		result = access(full_path, X_OK);
 
-    if (result == 0)
-    {
-      pid_t pid = fork();
+		if (result == 0)
+		{
+			pid_t pid = fork();
 
-      if (pid == -1)
-      {
-        perror("fork");
-        free(full_path);
-        return (-1);
-      }
-      else if (pid == 0)
-      {
-        execve(full_path, argv, NULL);
-        _exit(127);
-      }
-      else
-      {
-        waitpid(pid, NULL, 0);
-        free(full_path);
-        return (1);
-      }
-    }
+			if (pid == -1)
+			{
+				perror("fork");
+				free(full_path);
+				return (-1);
+			}
+			else if (pid == 0)
+			{
+				execve(full_path, argv, NULL);
+				_exit(127);
+			}
+			else
+			{
+				waitpid(pid, NULL, 0);
+				free(full_path);
+				free(path);
+				return (1);
+			}
+		}
 
-    free(full_path);
-    path = NULL;
-  }
+		free(full_path);
+		path_copy = NULL;
+	}
 
-  return (-1);
+	free(path);
+	return (-1);
 }
+
 
 
 /**
@@ -68,24 +72,24 @@ int ex_path(char **argv)
 */
 int ex_builtin(char *command)
 {
-  command_t commands[] = {
-    {"exit", exit_cmd},
-    {"env", env_cmd},
-    {NULL, NULL}
-  };
-  unsigned int i = 0;
+	command_t commands[] = {
+		{"exit", exit_cmd},
+		{"env", env_cmd},
+		{NULL, NULL}
+	};
+	unsigned int i = 0;
 
-  while (commands[i].cmd != NULL)
-  {
-    if (strcmp(command, commands[i].cmd) == 0)
-    {
-      commands[i].f();
-      return (1);
-    }
-      
-    i++;
-  }
-  return (-1);
+	while (commands[i].cmd != NULL)
+	{
+		if (strcmp(command, commands[i].cmd) == 0)
+		{
+			commands[i].f();
+			return (1);
+		}
+			
+		i++;
+	}
+	return (-1);
 }
 
 /**
@@ -96,32 +100,39 @@ int ex_builtin(char *command)
 */
 void call_command(char *command)
 {
-  char **argv = split_str(command);
-  pid_t pid;
+	char **argv = split_str(command);
+	pid_t pid;
 
-  /* Check if the cmd is built-in */
-  if (ex_builtin(argv[0]) == 1)
-    return;
+	/* Check if the cmd is built-in */
+	if (ex_builtin(argv[0]) == 1)
+	{
+		free_array(argv);
+		return;
+	}
 
-  /* Check if the cmd is in PATH*/
-  if (ex_path(argv) == 1)
-    return;
-  
-  pid = fork();
+	/* Check if the cmd is in PATH*/
+	if (ex_path(argv) == 1)
+	{
+		free_array(argv);
+		return;
+	}
+		
+	pid = fork();
 
-  if (pid == -1)
-    perror("Error");
-  else if (pid == 0)
-  {
-    if (execve(argv[0], argv, NULL) == -1)
-    {
-      perror("Error");
-      _exit(127);
-    }
-      
-  }
-  else
-    waitpid(pid, NULL, 0);
-    
-    
+	if (pid == -1)
+		perror("Error");
+	else if (pid == 0)
+	{
+		if (execve(argv[0], argv, NULL) == -1)
+		{
+			perror("Error");
+			free(command);
+			_exit(127);
+		}
+			
+	}
+	else
+		waitpid(pid, NULL, 0);
+	
+	free_array(argv);
 }

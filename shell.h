@@ -12,8 +12,8 @@
 #include <string.h>
 
 typedef struct command{
-  char *cmd;
-  void (*f)();
+	char *cmd;
+	void (*f)();
 } command_t;
 
 /* custom_commands */
@@ -31,6 +31,7 @@ int ex_path(char **argv);
 /* string_utils.c */
 char **split_str(char *str);
 int str_count_words(char *s, const char *delim);
+void free_array(char **arr);
 
 int _getline(char *s, int lim);
 
