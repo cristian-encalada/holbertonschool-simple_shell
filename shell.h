@@ -24,8 +24,8 @@ void env_cmd(char **args);
 void clear_cmd(char **args);
 
 /* main.c */
-int read_lines();
-
+int read_lines_interactive();
+int read_lines_non_interactive();
 /* command_manager.c */
 void call_command(char *command);
 int ex_builtin(char *command, char **args);
