@@ -12,17 +12,15 @@ int main(int argc, char **argv)
 	signal(SIGINT, SIG_IGN);
 
 	/* Disable Ctrl-C terminal interrupt for interactive shell only */
-	if (isatty(STDIN_FILENO) && argc > 1 && strcmp(argv[1], "-n") == 0) {
+	if (isatty(STDIN_FILENO) && argc > 1 && strcmp(argv[1], "-n") == 0)
 		system("stty -echoctl");
-	}
 
-	if (isatty(STDIN_FILENO)) {
-		/* Run in interactive mode */
+	if (isatty(STDIN_FILENO))   /* Run in interactive mode */
+		
 		read_lines_interactive();
-	} else {
-		/* Run in non-interactive mode */
+	else                        /* Run in non-interactive mode */
+
 		read_lines_non_interactive();
-	}
 
 	return (0);
 }
@@ -54,6 +52,9 @@ int read_lines_interactive()
         {
             break; /* End of input stream reached */
         }
+
+        if (chars_read == 1 && buffer[0] == '\n')
+            continue; /* Empty input string, read the next line */
 
         if (strcmp(buffer, "exit\n") == 0)
         {
