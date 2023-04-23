@@ -9,27 +9,37 @@
 */
 int main(int argc, char **argv)
 {
-	signal(SIGINT, SIG_IGN);
+	signal(SIGINT, sigint_handler);
 
 	/* Disable Ctrl-C terminal interrupt for interactive shell only */
 	if (isatty(STDIN_FILENO) && argc > 1 && strcmp(argv[1], "-n") == 0)
 		system("stty -echoctl");
 
 	if (isatty(STDIN_FILENO))   /* Run in interactive mode */
-		
 		read_lines_interactive();
-	else                        /* Run in non-interactive mode */
 
+	else                        /* Run in non-interactive mode */
 		read_lines_non_interactive();
 
 	return (0);
 }
 
 /**
+ * sigint_handler - handler for the SIGINT signal
+ * @sig: signal number
+ */
+void sigint_handler(int sig)
+{
+    (void) sig;
+    printf("\n$ ");
+    fflush(stdout);
+}
+
+/**
  * read_lines_interactive - Logic for reading user input in interactive mode.
  * 
  * Return: 1 on Success.
-*/
+ */
 int read_lines_interactive()
 {
     char *buffer;

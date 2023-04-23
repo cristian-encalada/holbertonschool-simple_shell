@@ -24,6 +24,7 @@ void clear_cmd(char **args);
 /* main.c */
 int read_lines_interactive();
 int read_lines_non_interactive();
+void sigint_handler(int sig);
 /* command_manager.c */
 void call_command(char *command);
 int ex_builtin(char *command, char **args);
