@@ -12,20 +12,16 @@ int main(int argc, char **argv)
 	signal(SIGINT, SIG_IGN);
 
 	/* Disable Ctrl-C terminal interrupt for interactive shell only */
-	if (argc > 1 && strcmp(argv[1], "-n") == 0) {
+	if (isatty(STDIN_FILENO) && argc > 1 && strcmp(argv[1], "-n") == 0) {
 		system("stty -echoctl");
 	}
 
-	if (argc == 1) {
+	if (isatty(STDIN_FILENO)) {
 		/* Run in interactive mode */
 		read_lines_interactive();
-	} else if (argc == 2 && strcmp(argv[1], "-n") == 0) {
+	} else {
 		/* Run in non-interactive mode */
 		read_lines_non_interactive();
-	} else {
-		/* Invalid command line arguments */
-		fprintf(stderr, "Usage: %s [-n]\n", argv[0]);
-		exit(1);
 	}
 
 	return (0);
@@ -38,33 +34,43 @@ int main(int argc, char **argv)
 */
 int read_lines_interactive()
 {
-	size_t bufsize = 1024;
-	int chars_read = 0;
+    char *buffer;
+    size_t bufsize = 1024;
+    int chars_read = 0;
 
-	buffer = (char *) malloc(bufsize * sizeof(char));
-	if(!buffer)
-	{
-		perror("Unable to allocate buffer");
-		exit(1);
-	}
+    buffer = (char *) malloc(bufsize * sizeof(char));
+    if(!buffer)
+    {
+        perror("Unable to allocate buffer");
+        exit(1);
+    }
 
-	while (1)
-	{
-		printf("$ ");
-		chars_read = getline(&buffer, &bufsize, stdin);
-		
-		if (buffer[chars_read - 1] != '\n'){
-			printf("\n");
-			free(buffer);
-			exit(1);
-		}
-		
-		buffer[chars_read - 1] = '\0';
-		call_command(buffer);
-	}
+    while (1)
+    {
+        printf("$ ");
+        chars_read = getline(&buffer, &bufsize, stdin);
 
-	free(buffer);
-	return (0);
+        if (chars_read == -1)
+        {
+            break; /* End of input stream reached */
+        }
+
+        if (strcmp(buffer, "exit\n") == 0)
+        {
+            break; /* User entered the "exit" command */
+        }
+
+        if (buffer[chars_read - 1] != '\n'){
+            printf("\n");
+            continue; /* Input did not end with a newline character, read the next line */
+        }
+
+        buffer[chars_read - 1] = '\0';
+        call_command(buffer);
+    }
+
+    free(buffer);
+    return (0);
 }
 
 /**
@@ -74,28 +80,28 @@ int read_lines_interactive()
 */
 int read_lines_non_interactive()
 {
-	size_t bufsize = 1024;
-	int chars_read = 0;
+    char *buffer;
+    size_t bufsize = 1024;
+    int chars_read = 0;
 
-	buffer = (char *) malloc(bufsize * sizeof(char));
-	if(!buffer)
-	{
-		perror("Unable to allocate buffer");
-		exit(1);
-	}
+    buffer = (char *) malloc(bufsize * sizeof(char));
+    if(!buffer)
+    {
+        perror("Unable to allocate buffer");
+        exit(1);
+    }
 
-	while ((chars_read = getline(&buffer, &bufsize, stdin)) != -1)
-	{
-		if (buffer[chars_read - 1] != '\n'){
-			printf("\n");
-			free(buffer);
-			exit(1);
-		}
-		
-		buffer[chars_read - 1] = '\0';
-		call_command(buffer);
-	}
+    while ((chars_read = getline(&buffer, &bufsize, stdin)) != -1)
+    {
+        if (buffer[chars_read - 1] != '\n'){
+            printf("\n");
+            continue; /* Input did not end with a newline character, read the next line */
+        }
 
-	free(buffer);
-	return (0);
+        buffer[chars_read - 1] = '\0';
+        call_command(buffer);
+    }
+
+    free(buffer);
+    return (0);
 }

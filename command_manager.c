@@ -124,13 +124,13 @@ void call_command(char *command)
 		perror("Error");
 	else if (pid == 0)
 	{
-		if (execve(argv[0], argv, NULL) == -1)
+		char *envp[] = {NULL};
+		if (execve(argv[0], argv, envp) == -1)
 		{
 			perror("Error");
 			free(command);
 			_exit(127);
-		}
-			
+		}	
 	}
 	else
 		waitpid(pid, NULL, 0);
