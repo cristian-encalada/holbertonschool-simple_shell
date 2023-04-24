@@ -15,6 +15,7 @@
 
 enum errors {cmd, mem, custom};
 char *fileName;
+char *prevDir;
 
 typedef struct command{
 	char *cmd;
@@ -46,6 +47,9 @@ int ex_path(char **argv);
 char **split_str(char *str);
 int str_count_words(char *s, const char *delim);
 void free_array(char **arr);
+
+/* dir_utils.c */
+char *get_current_dir();
 
 int _getline(char *s, int lim);
 

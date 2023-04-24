@@ -56,7 +56,7 @@ int read_lines_interactive()
 
 	while (1)
 	{
-		printf("$ ");
+		printf("%s$ ", get_current_dir());
 		chars_read = getline(&buffer, &bufsize, stdin);
 
 		if (chars_read == -1)
