@@ -60,8 +60,10 @@ int read_lines_interactive()
 		chars_read = getline(&buffer, &bufsize, stdin);
 
 		if (chars_read == -1)
+		{
+			printf("\n");
 			break; /* End of input stream reached */
-
+		}
 		if (chars_read == 1 && buffer[0] == '\n')
 			continue; /* Empty input string, read the next line */
 
