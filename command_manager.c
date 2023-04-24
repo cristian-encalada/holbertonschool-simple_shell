@@ -1,11 +1,11 @@
 #include "shell.h"
-
+extern char **environ;
 /**
  * ex_path - Executes a command in the PATH.
  *
  * @argv: Command name and arguments.
  * Return: 1 on Success, -1 on Error.
-*/
+ */
 int ex_path(char **argv)
 {
 	char *path = strdup(getenv("PATH"));
@@ -42,7 +42,9 @@ int ex_path(char **argv)
 			}
 			else if (pid == 0)
 			{
-				execve(full_path, argv, NULL);
+				execve(full_path, argv, environ);
+				/* execve only returns on error */
+				perror("execve");
 				_exit(127);
 			}
 			else
@@ -61,8 +63,6 @@ int ex_path(char **argv)
 	free(path);
 	return (-1);
 }
-
-
 
 /**
  * ex_builtin - Executes a built-in command
@@ -100,7 +100,6 @@ int ex_builtin(char *command, char **args)
  * call_command - Call an executable
  * 
  * @command: String containing the command name.
- * Return: void
 */
 void call_command(char *command)
 {
@@ -120,23 +119,26 @@ void call_command(char *command)
 		free_array(argv);
 		return;
 	}
-		
+
 	pid = fork();
 
 	if (pid == -1)
-		perror("Error");
+	{
+		perror("fork");
+		free_array(argv);
+		exit(EXIT_FAILURE); /* terminates the child process if execve fails */
+	}
 	else if (pid == 0)
 	{
-		char *envp[] = {NULL};
-		if (execve(argv[0], argv, envp) == -1)
+		if (execve(argv[0], argv, environ) == -1)
 		{
 			fprintf(stderr, "%s: 1: %s: not found\n", fileName, argv[0]);
 			free(command);
-			_exit(127);
-		}	
+			exit(EXIT_FAILURE);
+		}
 	}
 	else
 		waitpid(pid, NULL, 0);
-	
+
 	free_array(argv);
 }

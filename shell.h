@@ -15,7 +15,7 @@
 
 enum errors {cmd, mem, custom};
 extern char *fileName;
-char *prevDir;
+extern char *prevDir;
 
 typedef struct command{
 	char *cmd;
