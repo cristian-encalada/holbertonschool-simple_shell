@@ -1,5 +1,5 @@
 #include "shell.h"
-
+char *fileName;
 /**
  * main - Main entry of the program.
  * 
