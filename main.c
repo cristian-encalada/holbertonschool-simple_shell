@@ -50,7 +50,7 @@ int read_lines_interactive()
 	buffer = (char *) malloc(bufsize * sizeof(char));
 	if(!buffer)
 	{
-		perror("Unable to allocate buffer");
+		_perror(mem, strerror(errno));
 		exit(1);
 	}
 
@@ -92,7 +92,7 @@ int read_lines_non_interactive()
 	buffer = (char *) malloc(bufsize * sizeof(char));
 	if(!buffer)
 	{
-		perror("Unable to allocate buffer");
+		_perror(mem, strerror(errno));
 		exit(1);
 	}
 

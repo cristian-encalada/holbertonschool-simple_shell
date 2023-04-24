@@ -11,7 +11,9 @@
 #include <stdio.h>
 #include <string.h>
 #include <errno.h>
+#include <stdarg.h>
 
+enum errors {cmd, mem, custom};
 char *fileName;
 
 typedef struct command{
@@ -19,12 +21,16 @@ typedef struct command{
 	void (*f)(char **args);
 } command_t;
 
+/* errors.c */
+void _perror(enum errors err, char *s, ...);
+
 /* custom_commands */
 void exit_cmd(char **args);
 void env_cmd(char **args);
 void clear_cmd(char **args);
 void setenv_cmd(char **args);
 void unsetenv_cmd(char **args);
+void cd_cmd(char **args);
 
 /* main.c */
 int read_lines_interactive();

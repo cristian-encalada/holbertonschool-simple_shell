@@ -57,7 +57,7 @@ void setenv_cmd(char **args)
 
 	if (!args[1] || !args[2])
 	{
-		fprintf(stderr, "Error: Not valid sintax. Use: setenv (var) (name)\n");
+		_perror(cmd, "setenv (var) (name)");
 		return;
 	}
 
@@ -67,7 +67,7 @@ void setenv_cmd(char **args)
 	/* Create a string in the format "MY_VAR=my_value" */ 
 	env_var = malloc(strlen(name) + strlen(value) + 2);
 	if (env_var == NULL) {
-		fprintf(stderr, "Error: Failed to allocate memory: %s\n", strerror(errno));
+		_perror(mem, strerror(errno));
 		return;
   }
 
@@ -88,7 +88,7 @@ void setenv_cmd(char **args)
 	/* Allocate space for a new array that includes the new environment variable */
 	new_environ = malloc(sizeof(char*) * (i + 2));
 	if (new_environ == NULL) {
-		fprintf(stderr, "Error: Failed to allocate memory: %s\n", strerror(errno));
+		_perror(mem, strerror(errno));
 		free(env_var);
 		return;
 	}
@@ -111,7 +111,7 @@ void unsetenv_cmd(char **args)
 	unsigned int found = 0, j, i = 0;
 
 	if (!name) {
-		fprintf(stderr, "Error: Not valid syntax. Use: unsetenv VARIABLE\n");
+		_perror(cmd, "unsetenv (var)");
 		return;
 	}
 
@@ -128,6 +128,6 @@ void unsetenv_cmd(char **args)
 	}
 
 	if (!found) {
-		fprintf(stderr, "Error: Variable %s not found\n", name);
+		_perror(custom, "Error: Variable %s not found\n", name);
 	}
 }
