@@ -127,7 +127,7 @@ void call_command(char *command)
 		char *envp[] = {NULL};
 		if (execve(argv[0], argv, envp) == -1)
 		{
-			perror("Error");
+			perror(fileName);
 			free(command);
 			_exit(127);
 		}	

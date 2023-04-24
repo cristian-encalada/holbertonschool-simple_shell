@@ -20,7 +20,7 @@ void exit_cmd(char **args)
 {
 	int status = 0;
 
-/*if args[1] is not present, status will be set to 0*/
+	/*if args[1] is not present, status will be set to 0*/
 	if (args[1] != NULL)
 		status = atoi(args[1]);
 	exit(status);

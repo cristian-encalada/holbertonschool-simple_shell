@@ -11,6 +11,8 @@
 #include <stdio.h>
 #include <string.h>
 
+char *fileName;
+
 typedef struct command{
 	char *cmd;
 	void (*f)(char **args);
