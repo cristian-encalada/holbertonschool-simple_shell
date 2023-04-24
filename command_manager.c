@@ -76,6 +76,8 @@ int ex_builtin(char *command, char **args)
 		{"exit", exit_cmd},
 		{"env", env_cmd},
 		{"clear", clear_cmd},
+		{"setenv", setenv_cmd},
+		{"unsetenv", unsetenv_cmd},
 		{NULL, NULL}
 	};
 	unsigned int i = 0;
