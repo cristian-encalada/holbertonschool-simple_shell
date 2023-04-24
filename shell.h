@@ -14,7 +14,7 @@
 #include <stdarg.h>
 
 enum errors {cmd, mem, custom};
-char *fileName;
+extern char *fileName;
 
 typedef struct command{
 	char *cmd;

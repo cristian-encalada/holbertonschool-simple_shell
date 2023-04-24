@@ -130,7 +130,7 @@ void call_command(char *command)
 		char *envp[] = {NULL};
 		if (execve(argv[0], argv, envp) == -1)
 		{
-			perror(fileName);
+			fprintf(stderr, "%s: 1: %s: not found\n", fileName, argv[0]);
 			free(command);
 			_exit(127);
 		}	
