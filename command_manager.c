@@ -92,43 +92,51 @@ int ex_builtin(char *command, char **args)
 */
 int call_command(char *command)
 {
-	char **argv = split_str(command);
+	char **commands = split_str(command, ";");
+	int i = 0, status = 0;
 	pid_t pid;
-	int status;
-	/* Check if the cmd is built-in */
-	if (ex_builtin(argv[0], argv) == 1)
+
+	while (commands[i] != NULL)
 	{
-		free_array(argv);
-		return (0);
-	}
-	/* Check if the cmd is in PATH*/
-	if (ex_path(argv) == 1)
-	{
-		free_array(argv);
-		return (0);
-	}
-	pid = fork();
-	if (pid == -1)
-	{
-		perror("fork");
-		free_array(argv);
-		exit(EXIT_FAILURE); /* terminates the child process if execve fails */
-	}
-	else if (pid == 0)
-	{
-		if (execve(argv[0], argv, environ) == -1)
-		{
-			fprintf(stderr, "%s: 1: %s: not found\n", fileName, argv[0]);
-			free(command);
-			exit(127);
+		char **argv = split_str(commands[i], " \t\n\r");
+
+		if (argv == NULL)
+		{	free_array(commands);
+			return (127);
+		}	/* Check if the cmd is built-in */
+		if (ex_builtin(argv[0], argv) == 1)
+		{	free_array(argv);
+			i++;
+			continue;
+		}	/* Check if the cmd is in PATH*/
+		if (ex_path(argv) == 1)
+		{	free_array(argv);
+			i++;
+			continue;
 		}
+		pid = fork();
+		if (pid == -1)
+		{	perror("fork");
+			free_array(argv);
+			free_array(commands);
+			exit(EXIT_FAILURE); /* terminates the child process if execve fails */
+		}
+		else if (pid == 0)
+		{
+			if (execve(argv[0], argv, environ) == -1)
+			{	fprintf(stderr, "%s: 1: %s: not found\n", fileName, argv[0]);
+				free(command);
+				exit(127);
+			}
+		}
+		else
+		{	waitpid(pid, &status, 0);
+			if (WIFEXITED(status)) /* Check if the child process exited normally */
+				status = WEXITSTATUS(status); /* Get the status of the child process */
+		}
+		free_array(argv);
+		i++;
 	}
-	else
-	{
-		waitpid(pid, &status, 0);
-		if (WIFEXITED(status)) /* Check if the child process exited normally */
-			status = WEXITSTATUS(status); /* Get the exit status of the child process */
-	}
-	free_array(argv);
+	free_array(commands);
 	return (status); /* Return the exit status */
 }

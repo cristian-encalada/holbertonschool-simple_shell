@@ -61,7 +61,7 @@ int ex_builtin(char *command, char **args);
 int ex_path(char **argv);
 
 /* string_utils.c */
-char **split_str(char *str);
+char **split_str(char *str, const char *delim);
 int str_count_words(char *s, const char *delim);
 void free_array(char **arr);
 

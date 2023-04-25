@@ -1,50 +1,50 @@
 #include "shell.h"
 
 /**
- * split_str - Splits a string.
+ * split_str - Splits a string by a given delimiter.
  * @str: String to be splitted.
+ * @delim: Delimiter to use for splitting.
  *
- * Return: Void
-*/
-char **split_str(char *str)
+ * Return: An array of strings representing the split input.
+ */
+char **split_str(char *str, const char *delim)
 {
-	const char *delim = " ";         /* Delimiter */
 	char *tok, *copy;
 	char **array;
 	unsigned int len = 0, count = 0, i = 0;
 	int numWords = str_count_words(str, delim);
+
 	/* Make a copy of the input string */
 	copy = strdup(str);
 	if (copy == NULL)
 		return (NULL);
+
 	array = (char **) malloc((numWords + 1) * sizeof(char *));
 	if (array == NULL)
 		return (NULL);
-	tok = strtok(copy, delim);
 
+	tok = strtok(copy, delim);
 	while (tok != NULL)
 	{
-		for (len = 0; tok[len]; len++)
-			;
+		len = strlen(tok);
 
 		array[count] = (char *) malloc((len + 1) * sizeof(char));
 		if (array[count] == NULL)
 		{
 			free_array(array);
-			free(copy);  /* Free the copy of the input string */
+			free(copy);
 			return (NULL);
 		}
 
 		for (i = 0; i < len; i++)
-		{
 			array[count][i] = tok[i];
-		}
-		array[count][i] = '\0';
+
+	    array[count][i] = '\0';
 		count++;
 		tok = strtok(NULL, delim);
 	}
 	array[count] = NULL;
-	free(copy);  /* Free the copy of the input string */
+	free(copy);
 	return (array);
 }
 
