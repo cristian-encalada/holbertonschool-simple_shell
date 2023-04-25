@@ -47,6 +47,8 @@ int read_lines_interactive(void)
 	char *buffer;
 	size_t bufsize = 1024;
 	int chars_read = 0;
+	
+	system("./logo/logo");		/* Executes the Holberton logo executable */
 
 	buffer = (char *) malloc(bufsize * sizeof(char));
 	if (!buffer)
