@@ -16,6 +16,7 @@
 enum errors {cmd, mem, custom};
 extern char *fileName;
 extern char *prevDir;
+extern int last_status;
 
 typedef struct command{
 	char *cmd;
@@ -39,7 +40,7 @@ int read_lines_non_interactive();
 void sigint_handler(int sig);
 
 /* command_manager.c */
-void call_command(char *command);
+int call_command(char *command);
 int ex_builtin(char *command, char **args);
 int ex_path(char **argv);
 

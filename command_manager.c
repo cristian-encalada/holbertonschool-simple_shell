@@ -98,26 +98,26 @@ int ex_builtin(char *command, char **args)
 
 /**
  * call_command - Call an executable
- * 
  * @command: String containing the command name.
 */
-void call_command(char *command)
+int call_command(char *command)
 {
 	char **argv = split_str(command);
 	pid_t pid;
+	int status;
 
 	/* Check if the cmd is built-in */
 	if (ex_builtin(argv[0], argv) == 1)
 	{
 		free_array(argv);
-		return;
+		return (0);
 	}
 
 	/* Check if the cmd is in PATH*/
 	if (ex_path(argv) == 1)
 	{
 		free_array(argv);
-		return;
+		return (0);
 	}
 
 	pid = fork();
@@ -134,11 +134,12 @@ void call_command(char *command)
 		{
 			fprintf(stderr, "%s: 1: %s: not found\n", fileName, argv[0]);
 			free(command);
-			exit(EXIT_FAILURE);
+			exit(127);
 		}
 	}
 	else
-		waitpid(pid, NULL, 0);
+		waitpid(pid, &status, 0);
 
 	free_array(argv);
+    return (-1); /* execve failed to execute the command */
 }

@@ -1,5 +1,4 @@
 #include "shell.h"
-
 /**
  * clear_cmd - Clear the cmd.
  * 
@@ -18,12 +17,10 @@ void clear_cmd(char **args)
 */
 void exit_cmd(char **args)
 {
-	int status = 0;
-
-	/*if args[1] is not present, status will be set to 0*/
+	/*if args[1] is not present, last_status will be set to 0*/
 	if (args[1] != NULL)
-		status = atoi(args[1]);
-	exit(status);
+		last_status = atoi(args[1]);
+	exit(last_status);
 }
 
 /**

@@ -1,5 +1,6 @@
 #include "shell.h"
 char *fileName;
+int last_status;
 /**
  * main - Main entry of the program.
  * 
@@ -73,11 +74,16 @@ int read_lines_interactive()
 		}
 
 		buffer[chars_read - 1] = '\0';
-		call_command(buffer);
+		if (call_command(buffer) == -1)         /* execve failed to execute the command */
+		{
+			last_status = 127;
+        	continue; /* Keep the previous value of last_status */
+		}
+        last_status = 0; /* Command was executed successfully */
 	}
 
 	free(buffer);
-	return (0);
+	return (last_status);
 }
 
 /**
@@ -106,9 +112,14 @@ int read_lines_non_interactive()
 		}
 
 		buffer[chars_read - 1] = '\0';
-		call_command(buffer);
+		if (call_command(buffer) == -1)         /* execve failed to execute the command */
+		{
+			last_status = 127;
+        	continue; 							/* Keep the previous value of last_status */
+		}
+        last_status = 0; 						/* Command was executed successfully */
 	}
 
 	free(buffer);
-	return (0);
+	return (last_status);
 }
