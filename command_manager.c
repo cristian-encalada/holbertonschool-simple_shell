@@ -99,6 +99,8 @@ int ex_builtin(char *command, char **args)
 /**
  * call_command - Call an executable
  * @command: String containing the command name.
+ *
+ * Return: 1 on Success, -1 on Error.
 */
 int call_command(char *command)
 {
@@ -141,5 +143,5 @@ int call_command(char *command)
 		waitpid(pid, &status, 0);
 
 	free_array(argv);
-    return (-1); /* execve failed to execute the command */
+    return (-1);
 }

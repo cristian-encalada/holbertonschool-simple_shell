@@ -106,18 +106,16 @@ int read_lines_non_interactive()
 
 	while ((chars_read = getline(&buffer, &bufsize, stdin)) != -1)
 	{
-		if (buffer[chars_read - 1] != '\n'){
+		if (buffer[chars_read - 1] != '\n')
+		{
 			printf("\n");
 			continue; /* Input did not end with a newline character, read the next line */
 		}
 
 		buffer[chars_read - 1] = '\0';
 		if (call_command(buffer) == -1)         /* execve failed to execute the command */
-		{
-			last_status = 127;
-        	continue; 							/* Keep the previous value of last_status */
-		}
-        last_status = 0; 						/* Command was executed successfully */
+			exit (127);
+        last_status = 0; /* Command was executed successfully */
 	}
 
 	free(buffer);
