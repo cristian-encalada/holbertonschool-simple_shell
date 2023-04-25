@@ -117,15 +117,17 @@ void help_cmd(char **args)
 		return;
 	}
 
-	file = malloc(strlen(args[1]) + strlen(extension));
-	strcat(file, args[1]);
-	strcat(file, extension);
-
-	if (!file){
+	file = malloc(strlen(args[1]) + strlen(extension) + 1);
+	if (!file)
+	{
 		_perror(mem, strerror(errno));
 		return;
 	}
+	file[0] = '\0'; /* set first byte to zero */
+	strcat(file, args[1]);
+	strcat(file, extension);
 
+	printf("Opening file: %s\n", file);
 	fp = fopen(file, "r");
 
 	if (!fp)
