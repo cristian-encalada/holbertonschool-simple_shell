@@ -114,3 +114,46 @@ void alias_cmd(char **args)
 		}
 	}
 }
+
+/**
+ * help_cmd - Define an alias or list them.
+ *
+ * @args: List of arguments passed to the function.
+ * Return: void.
+ */
+void help_cmd(char **args)
+{
+	FILE *fp;
+	char *file, *extension = ".help";
+	char line[1024];
+
+	if (!args[1])
+	{
+		_perror(cmd, "help (built-in)");
+		return;
+	}
+
+	file = malloc(strlen(args[1]) + strlen(extension));
+	strcat(file, args[1]);
+	strcat(file, extension);
+
+	if (!file){
+		_perror(mem, strerror(errno));
+		return;
+	}
+
+	fp = fopen(file, "r");
+
+	if (!fp)
+	{
+		_perror(custom, "Error: Unknown command or no help was found.\n");
+		return;
+	}
+
+	while (fgets(line, 1024, fp))
+	{
+		printf("%s", line);
+	}
+
+	fclose(fp);
+}

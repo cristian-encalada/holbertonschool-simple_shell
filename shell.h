@@ -39,6 +39,7 @@ void setenv_cmd(char **args);
 void unsetenv_cmd(char **args);
 void cd_cmd(char **args);
 void alias_cmd(char **args);
+void help_cmd(char **args);
 
 /* main.c */
 int read_lines_interactive();

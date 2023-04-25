@@ -1,0 +1,7 @@
+exit: exit [status]
+    Exit the shell with the given status or 0 if not stated.
+    
+    If the command receives a letter as a status, it exits with value 0.
+    
+    Exit Status:
+    Returns 0 unless status argument is received.

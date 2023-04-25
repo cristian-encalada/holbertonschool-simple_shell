@@ -80,6 +80,7 @@ int ex_builtin(char *command, char **args)
 		{"unsetenv", unsetenv_cmd},
 		{"cd", cd_cmd},
 		{"alias", alias_cmd},
+		{"help", help_cmd},
 		{NULL, NULL}
 	};
 	unsigned int i = 0;
