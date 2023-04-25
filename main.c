@@ -18,10 +18,10 @@ int main(int argc, char **argv)
 		system("stty -echoctl");
 
 	if (isatty(STDIN_FILENO))   /* Run in interactive mode */
-		read_lines_interactive();
+		return (read_lines_interactive());
 
 	else                        /* Run in non-interactive mode */
-		read_lines_non_interactive();
+		return (read_lines_non_interactive());
 
 	return (0);
 }
@@ -40,7 +40,7 @@ void sigint_handler(int sig)
 /**
  * read_lines_interactive - Logic for reading user input in interactive mode.
  * 
- * Return: 1 on Success.
+ * Return: 0 on Success,  127 on Error.
  */
 int read_lines_interactive()
 {
@@ -74,7 +74,7 @@ int read_lines_interactive()
 		}
 
 		buffer[chars_read - 1] = '\0';
-		if (call_command(buffer) == -1)         /* execve failed to execute the command */
+		if (call_command(buffer) == 127)         /* execve failed to execute the command */
 		{
 			last_status = 127;
         	continue; /* Keep the previous value of last_status */
@@ -89,29 +89,32 @@ int read_lines_interactive()
 /**
  * read_lines_non_interactive - Logic for reading user input in non-interactive mode.
  * 
- * Return: 1 on Success.
+ * Return: 1 on Success, 127 on Error.
 */
 int read_lines_non_interactive()
 {
-	char *buffer;
-	size_t bufsize = 1024;
-	int chars_read = 0;
+    char *buffer;
+    size_t bufsize = 1024;
+    int chars_read = 0;
+    int status, last_status = 0;
 
-	buffer = (char *) malloc(bufsize * sizeof(char));
-	if(!buffer)
-	{
-		_perror(mem, strerror(errno));
-		exit(1);
-	}
+    buffer = (char *) malloc(bufsize * sizeof(char));
+    if(!buffer)
+    {
+        _perror(mem, strerror(errno));
+        exit(1);
+    }
 
-	while ((chars_read = getline(&buffer, &bufsize, stdin)) != -1)
-	{
-		buffer[chars_read - 1] = '\0';
-		if (call_command(buffer) != -1)         /* execve failed to execute the command */
-			last_status = 127;
-		last_status = 0; /* Command was executed successfully */
-	}
+    while ((chars_read = getline(&buffer, &bufsize, stdin)) != -1)
+    {
+        buffer[chars_read - 1] = '\0';
+        if (call_command(buffer) == 127)         /* execve failed to execute the command */
+            status = 127;
+        else
+            status = 0; 						/* Command was executed successfully */
+        last_status = status;
+    }
 
-	free(buffer);
-	return (last_status);
+    free(buffer);
+    return (last_status);
 }

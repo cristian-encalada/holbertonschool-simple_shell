@@ -101,13 +101,13 @@ int ex_builtin(char *command, char **args)
  * call_command - Call an executable
  * @command: String containing the command name.
  *
- * Return: 1 on Success, -1 on Error.
+ * Return: 1 on Success, 127 on Error.
 */
 int call_command(char *command)
 {
 	char **argv = split_str(command);
 	pid_t pid;
-	int status = 0;
+	int status;
 
 	/* Check if the cmd is built-in */
 	if (ex_builtin(argv[0], argv) == 1)
@@ -141,8 +141,12 @@ int call_command(char *command)
 		}
 	}
 	else
+	{
 		waitpid(pid, &status, 0);
+		if (WIFEXITED(status)) /* Check if the child process exited normally */
+			status = WEXITSTATUS(status); /* Get the exit status of the child process */
+	}
 
 	free_array(argv);
-    return (-1);
+    return (status); /* Return the exit status */
 }
