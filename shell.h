@@ -23,6 +23,11 @@ typedef struct command{
 	void (*f)(char **args);
 } command_t;
 
+/* alias_utils.c */
+int set_alias(char *name, char *value);
+void print_aliases();
+void print_alias(char *arg, char *name, char *value);
+
 /* errors.c */
 void _perror(enum errors err, char *s, ...);
 
@@ -33,6 +38,7 @@ void clear_cmd(char **args);
 void setenv_cmd(char **args);
 void unsetenv_cmd(char **args);
 void cd_cmd(char **args);
+void alias_cmd(char **args);
 
 /* main.c */
 int read_lines_interactive();

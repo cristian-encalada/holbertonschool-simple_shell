@@ -75,3 +75,42 @@ void cd_cmd(char **args)
 	sprintf(cmd, "setenv PWD %s", current_dir);
 	call_command(cmd);
 }
+
+/**
+ * alias_cmd - Define an alias or list them.
+ *
+ * @args: List of arguments passed to the function.
+ * Return: void.
+ */
+void alias_cmd(char **args)
+{
+	char *name, *value;
+	unsigned int i;
+
+	if (!args[1])
+	{
+		/* Print all aliases */
+		print_aliases();
+		putchar('\n');
+		return;
+	}
+
+	/* Parse arguments */
+	for (i = 1; args[i]; i++)
+	{
+		if (strchr(args[i], '='))
+		{
+			/* Define an alias */
+			name = strtok(args[i], "=");
+			value = strtok(NULL, "=");
+
+			if (set_alias(name, value) != 0)
+				_perror(custom, "Error: Could not define alias.\n");
+		}
+		else
+		{
+			/* Print an alias */
+			print_alias(args[i], name, value);
+		}
+	}
+}
