@@ -2,7 +2,6 @@
 
 /**
  * _perror - Custom print error function.
- * 
  * @err: Which type of error is happening.
  * @s: Extra details about it.
 */
@@ -15,7 +14,7 @@ void _perror(enum errors err, char *s, ...)
 
 	va_start(args, s);
 
-	switch(err)
+	switch (err)
 	{
 		case cmd:
 			fprintf(stderr, "Error: Not valid sintax. Use: %s\n", s);

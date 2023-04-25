@@ -9,65 +9,52 @@ extern char **environ;
 int ex_path(char **argv)
 {
 	char *path = strdup(getenv("PATH"));
-	char *path_copy = path;
-	char *dir, *full_path;
+	char *path_copy = path, *dir, *full_path;
 	int len_dir, len_cmd, result;
 
 	if (!path || !*argv)
 		return (-1);
-
 	len_cmd = strlen(*argv);
-
 	while ((dir = strtok(path_copy, ":")))
 	{
 		len_dir = strlen(dir);
 		full_path = malloc(len_dir + len_cmd + 2);
-
 		if (!full_path)
 			return (-1);
-
 		sprintf(full_path, "%s/%s", dir, *argv);
-
 		result = access(full_path, X_OK);
-
 		if (result == 0)
-		{
-			pid_t pid = fork();
+		{	pid_t pid = fork();
 
 			if (pid == -1)
-			{
-				perror("fork");
+			{	perror("fork");
 				free(full_path);
 				return (-1);
 			}
 			else if (pid == 0)
-			{
-				execve(full_path, argv, environ);
-				/* execve only returns on error */
+			{	execve(full_path, argv, environ);
 				perror("execve");
 				_exit(127);
 			}
 			else
-			{
-				waitpid(pid, NULL, 0);
+			{	waitpid(pid, NULL, 0);
 				free(full_path);
 				free(path);
 				return (1);
 			}
 		}
-
 		free(full_path);
 		path_copy = NULL;
 	}
-
 	free(path);
 	return (-1);
 }
 
 /**
  * ex_builtin - Executes a built-in command
- * 
  * @command: Command name.
+ * @args: Input arguments.
+ *
  * Return: 1 on Success, -1 on Error.
 */
 int ex_builtin(char *command, char **args)
@@ -92,7 +79,6 @@ int ex_builtin(char *command, char **args)
 			commands[i].f(args);
 			return (1);
 		}
-			
 		i++;
 	}
 	return (-1);
@@ -102,30 +88,26 @@ int ex_builtin(char *command, char **args)
  * call_command - Call an executable
  * @command: String containing the command name.
  *
- * Return: 1 on Success, 127 on Error.
+ * Return: 0 on Success, 127 on Error.
 */
 int call_command(char *command)
 {
 	char **argv = split_str(command);
 	pid_t pid;
 	int status;
-
 	/* Check if the cmd is built-in */
 	if (ex_builtin(argv[0], argv) == 1)
 	{
 		free_array(argv);
 		return (0);
 	}
-
 	/* Check if the cmd is in PATH*/
 	if (ex_path(argv) == 1)
 	{
 		free_array(argv);
 		return (0);
 	}
-
 	pid = fork();
-
 	if (pid == -1)
 	{
 		perror("fork");
@@ -147,7 +129,6 @@ int call_command(char *command)
 		if (WIFEXITED(status)) /* Check if the child process exited normally */
 			status = WEXITSTATUS(status); /* Get the exit status of the child process */
 	}
-
 	free_array(argv);
-    return (status); /* Return the exit status */
+	return (status); /* Return the exit status */
 }

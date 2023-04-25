@@ -20,9 +20,7 @@ int set_alias(char *name, char *value)
 		_perror(custom, "Error: Could not open aliases file.\n");
 		return (-1);
 	}
-
 	snprintf(buffer, 1024, "%s='%s'", name, value);
-
 	/* Search for an existing alias with the same name */
 	while (fgets(line, 1024, fp))
 	{
@@ -34,19 +32,13 @@ int set_alias(char *name, char *value)
 			fputs("\n", tmp);
 		}
 		else
-		{
-			/* Copy non-matching lines to temporary file */
-			fputs(line, tmp);
-		}
+			fputs(line, tmp); /* Copy non-matching lines to temporary file */
 	}
-
-	/* If no existing alias was found, add a new one */
-	if (!found)
+	if (!found)	/* If no existing alias was found, add a new one */
 	{
 		fputs(buffer, tmp);
 		fputs("\n", tmp);
 	}
-
 	/* Close files and replace original file with temporary file */
 	fclose(fp);
 	fclose(tmp);
@@ -55,16 +47,13 @@ int set_alias(char *name, char *value)
 		_perror(custom, "Error: Could not update aliases file.\n");
 		return (-1);
 	}
-
 	return (0);
 }
 
 /**
  * print_aliases - prints all aliases.
- * 
- * Return: void
  */
-void print_aliases()
+void print_aliases(void)
 {
 	char line[1024];
 	FILE *fp = fopen(".aliases", "r");
@@ -82,7 +71,12 @@ void print_aliases()
 
 	fclose(fp);
 }
-
+/**
+ * print_alias - print an individual alias
+ * @arg: input argument
+ * @name: name of the alias.
+ * @value: value of the alias.
+ */
 void print_alias(char *arg, char *name, char *value)
 {
 	FILE *fp;

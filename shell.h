@@ -13,19 +13,28 @@
 #include <errno.h>
 #include <stdarg.h>
 
-enum errors {cmd, mem, custom};
+enum errors
+{
+	cmd, mem, custom
+};
 extern char *fileName;
 extern char *prevDir;
 extern int last_status;
 
-typedef struct command{
+/**
+ * struct command - Struct for commands
+ * @cmd: Command name
+ * @f: Function pointer
+ */
+typedef struct command
+{
 	char *cmd;
 	void (*f)(char **args);
 } command_t;
 
 /* alias_utils.c */
 int set_alias(char *name, char *value);
-void print_aliases();
+void print_aliases(void);
 void print_alias(char *arg, char *name, char *value);
 
 /* errors.c */
@@ -42,8 +51,8 @@ void alias_cmd(char **args);
 void help_cmd(char **args);
 
 /* main.c */
-int read_lines_interactive();
-int read_lines_non_interactive();
+int read_lines_interactive(void);
+int read_lines_non_interactive(void);
 void sigint_handler(int sig);
 
 /* command_manager.c */
@@ -57,8 +66,7 @@ int str_count_words(char *s, const char *delim);
 void free_array(char **arr);
 
 /* dir_utils.c */
-char *get_current_dir();
-
+char *get_current_dir(void);
 int _getline(char *s, int lim);
 
-#endif
+#endif /* _SHELL_H_ */

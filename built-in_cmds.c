@@ -1,7 +1,7 @@
 #include "shell.h"
 /**
  * clear_cmd - Clear the cmd.
- * 
+ * @args: Input arguments.
  * Return: void.
 */
 void clear_cmd(char **args)
@@ -12,7 +12,7 @@ void clear_cmd(char **args)
 
 /**
  * exit_cmd - Exit the shell.
- * 
+ * @args: Input arguments.
  * Return: void.
 */
 void exit_cmd(char **args)
@@ -25,7 +25,7 @@ void exit_cmd(char **args)
 
 /**
  * env_cmd - Prints the environment.
- * 
+ * @args: Input arguments.
  * Return: void.
 */
 void env_cmd(char **args)
@@ -41,8 +41,9 @@ void env_cmd(char **args)
 }
 
 /**
- * setenv_cmd - Initialize a new environment variable, or modify an existing one
- * 
+ * setenv_cmd - Initialize a new environment variable
+ *				or modify an existing one
+ * @args: Input arguments.
  * Return: void.
 */
 void setenv_cmd(char **args)
@@ -57,40 +58,33 @@ void setenv_cmd(char **args)
 		_perror(cmd, "setenv (var) (name)");
 		return;
 	}
-
 	name = args[1];
 	value = args[2];
-
-	/* Create a string in the format "MY_VAR=my_value" */ 
+	/* Create a string in the format "MY_VAR=my_value" */
 	env_var = malloc(strlen(name) + strlen(value) + 2);
-	if (env_var == NULL) {
-		_perror(mem, strerror(errno));
+	if (env_var == NULL)
+	{	_perror(mem, strerror(errno));
 		return;
-  }
-
+	}
 	sprintf(env_var, "%s=%s", name, value);
-
-	/* Loop through the environment variables to find the variable to modify */ 
-	for (; environ[i] != NULL; i++) {
-		if (strncmp(environ[i], name, strlen(name)) == 0 && (environ[i])[strlen(name)] == '=') {
-			/* Replace the value of the environment variable*/
+	for (; environ[i] != NULL; i++)		/* Loop to find the variable to modify */
+	{
+		if (strncmp(environ[i], name, strlen(name)) == 0
+					&& (environ[i])[strlen(name)] == '=')
+		{	/* Replace the value of the environment variable*/
 			environ[i] = env_var;
 			return;
 		}
 	}
-
 	for (; environ[i] != NULL; i++)
 		;
-
-	/* Allocate space for a new array that includes the new environment variable */
-	new_environ = malloc(sizeof(char*) * (i + 2));
-	if (new_environ == NULL) {
-		_perror(mem, strerror(errno));
+	new_environ = malloc(sizeof(char *) * (i + 2));
+	if (new_environ == NULL)
+	{	_perror(mem, strerror(errno));
 		free(env_var);
 		return;
 	}
-	
-	memcpy(new_environ, environ, sizeof(char*) * i);
+	memcpy(new_environ, environ, sizeof(char *) * i);
 	new_environ[i] = env_var;
 	new_environ[i + 1] = NULL;
 	environ = new_environ;
@@ -98,7 +92,7 @@ void setenv_cmd(char **args)
 
 /**
  * unsetenv_cmd - Remove an environment variable
- * 
+ * @args: Input arguments.
  * Return: void.
 */
 void unsetenv_cmd(char **args)
@@ -107,24 +101,26 @@ void unsetenv_cmd(char **args)
 	char *name = args[1];
 	unsigned int found = 0, j, i = 0;
 
-	if (!name) {
+	if (!name)
+	{
 		_perror(cmd, "unsetenv (var)");
 		return;
 	}
-
-	/* Loop through the environment variables to find the variable to remove */ 
-	for (; environ[i] != NULL; i++) {
-		if (strncmp(environ[i], name, strlen(name)) == 0 && environ[i][strlen(name)] == '=') {
-			/* Shift the environment variables to the left, overwriting the variable to remove */
-			for (j = i; environ[j] != NULL; j++) {
+	/* Loop through the environment variables to find the variable to remove */
+	for (; environ[i] != NULL; i++)
+	{
+		if (strncmp(environ[i], name, strlen(name)) == 0
+					&& environ[i][strlen(name)] == '=')
+		{
+			/* Left shifting  the env variables, overwriting the variable to remove */
+			for (j = i; environ[j] != NULL; j++)
+			{
 				environ[j] = environ[j + 1];
 			}
 			found = 1;
 			break;
 		}
 	}
-
-	if (!found) {
+	if (!found)
 		_perror(custom, "Error: Variable %s not found\n", name);
-	}
 }
