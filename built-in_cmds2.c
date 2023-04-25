@@ -109,6 +109,7 @@ void help_cmd(char **args)
 {
 	FILE *fp;
 	char *file, *extension = ".help";
+	char *directory = "./help/";
 	char line[1024];
 
 	if (!args[1])
@@ -117,18 +118,18 @@ void help_cmd(char **args)
 		return;
 	}
 
-	file = malloc(strlen(args[1]) + strlen(extension) + 1);
+	file = malloc(strlen(directory) + strlen(args[1]) + strlen(extension) + 1);
 	if (!file)
 	{
 		_perror(mem, strerror(errno));
 		return;
 	}
-	file[0] = '\0'; /* set first byte to zero */
+	file[0] = '\0';				/* set first byte to zero */
 	strcat(file, args[1]);
 	strcat(file, extension);
 
-	printf("Opening file: %s\n", file);
-	fp = fopen(file, "r");
+	sprintf(file, "%s%s%s", directory, args[1], extension);
+	fp = fopen(file, "r");		/* read-only mode */
 
 	if (!fp)
 	{
