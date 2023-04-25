@@ -107,7 +107,7 @@ int call_command(char *command)
 {
 	char **argv = split_str(command);
 	pid_t pid;
-	int status;
+	int status = 0;
 
 	/* Check if the cmd is built-in */
 	if (ex_builtin(argv[0], argv) == 1)
