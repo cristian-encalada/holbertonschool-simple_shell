@@ -92,7 +92,8 @@ int ex_builtin(char *command, char **args)
 */
 int call_command(char *command)
 {
-	char **commands = split_str(command, ";");
+	char *clean_command = remove_comment(command);
+	char **commands = split_str(clean_command, ";");
 	int i = 0, status = 0;
 	pid_t pid;
 
@@ -100,10 +101,18 @@ int call_command(char *command)
 	{
 		char **argv = split_str(commands[i], " \t\n\r");
 
+		if (commands[i][0] == '#')  /* Ignore commands that start with "#" */
+		{
+			i++;
+			continue;
+		}
 		if (argv == NULL)
-		{	free_array(commands);
+		{
+			free(clean_command);
+			free_array(commands);
 			return (127);
-		}	/* Check if the cmd is built-in */
+		}
+		/* Check if the cmd is built-in */
 		if (ex_builtin(argv[0], argv) == 1)
 		{	free_array(argv);
 			i++;

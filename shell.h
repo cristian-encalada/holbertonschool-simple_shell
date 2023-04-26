@@ -64,7 +64,7 @@ int ex_path(char **argv);
 char **split_str(char *str, const char *delim);
 int str_count_words(char *s, const char *delim);
 void free_array(char **arr);
-
+char *remove_comment(char *str);
 /* dir_utils.c */
 char *get_current_dir(void);
 int _getline(char *s, int lim);

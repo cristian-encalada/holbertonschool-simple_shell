@@ -9,7 +9,7 @@
  */
 char **split_str(char *str, const char *delim)
 {
-	char *tok, *copy;
+	char *tok, *copy, *comment;
 	char **array;
 	unsigned int len = 0, count = 0, i = 0;
 	int numWords = str_count_words(str, delim);
@@ -23,7 +23,7 @@ char **split_str(char *str, const char *delim)
 	if (array == NULL)
 		return (NULL);
 
-	tok = strtok(copy, delim);
+	tok = strtok_r(copy, delim, &comment);
 	while (tok != NULL)
 	{
 		len = strlen(tok);
@@ -41,7 +41,7 @@ char **split_str(char *str, const char *delim)
 
 	    array[count][i] = '\0';
 		count++;
-		tok = strtok(NULL, delim);
+		tok = strtok_r(NULL, delim, &comment);
 	}
 	array[count] = NULL;
 	free(copy);
@@ -57,23 +57,38 @@ char **split_str(char *str, const char *delim)
 */
 int str_count_words(char *s, const char *delim)
 {
-	char *tok;
+	char *tok, *comment;
 	int numWords = 0;
 	char *newS = strdup(s);
 
 	if (newS == NULL)
 		return (0);
 
-	tok = strtok(newS, delim);         /* Get first token */
+	tok = strtok_r(newS, delim, &comment);         /* Get first token */
 
 	while (tok != NULL)               /* Check for delimiters */
 	{
 		numWords++;
-		tok = strtok(NULL, delim);    /* Go through other tokens */
+		tok = strtok_r(NULL, delim, &comment);    /* Go through other tokens */
 	}
 
 	free(newS);
 	return (numWords);
+}
+
+/**
+ * remove_comment - Remove comments from a string.
+ * @str: String to be checked.
+ *
+ * Return: 0 if no comment, 1 if comment removed.
+*/
+char *remove_comment(char *str)
+{
+	char *comment_ptr = strchr(str, '#');	/* first occurrence of the # */
+
+	if (comment_ptr != NULL)
+		*comment_ptr = '\0';
+	return (str);								/* Return the modified string */
 }
 
 /**
