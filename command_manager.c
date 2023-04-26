@@ -121,6 +121,9 @@ int call_command(char *command)
 	int i = 0, status = 0;
 	pid_t pid;
 
+	if (commands == NULL)
+		return (status);
+
 	while (commands[i] != NULL)
 	{
 		char **argv = split_str(commands[i], " \t\n\r");
