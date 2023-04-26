@@ -132,7 +132,10 @@ int call_command(char *command)
 	pid_t pid;
 
 	if (commands == NULL)
-		return (status);
+	{
+		free(clean_command);
+		return status;
+	}
 
 	while (commands[i] != NULL)
 	{
@@ -141,6 +144,7 @@ int call_command(char *command)
 		if (commands[i][0] == '#')  /* Ignore commands that start with "#" */
 		{
 			i++;
+			free_array(argv);
 			continue;
 		}
 		if (argv == NULL)
@@ -167,6 +171,7 @@ int call_command(char *command)
 		if (pid == -1)
 		{	
 			perror("fork");
+			free(clean_command);
 			free_array(argv);
 			free_array(commands);
 			exit(EXIT_FAILURE); /* terminates the child process if execve fails */
@@ -176,6 +181,9 @@ int call_command(char *command)
 			if (execve(argv[0], argv, environ) == -1)
 			{	
 				fprintf(stderr, "%s: 1: %s: not found\n", fileName, argv[0]);
+				free(clean_command);
+				free_array(argv);
+				free_array(commands);
 				exit(127);
 			}
 		}
@@ -188,6 +196,7 @@ int call_command(char *command)
 		free_array(argv);
 		i++;
 	}
+	free(clean_command);
 	free_array(commands);
 	return (status); /* Return the exit status */
 }
