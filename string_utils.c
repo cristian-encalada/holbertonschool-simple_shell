@@ -23,6 +23,19 @@ char **split_str(char *str, const char *delim)
 	if (array == NULL)
 		return (NULL);
 
+	/* Check if the string starts with a colon */
+	if (copy[0] == ':') 
+	{
+		array[count] = strdup("");
+		if (array[count] == NULL) 
+		{
+			free_array(array);
+			free(copy);
+			return (NULL);
+		}
+		count++;
+	}
+
 	tok = strtok_r(copy, delim, &comment);
 
 	for (i = 0; tok[i]; i++)
