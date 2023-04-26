@@ -31,9 +31,16 @@ void ex_filecmd(char *file)
  */
 int ex_path(char **argv)
 {
-	char *path = strdup(getenv("PATH"));
-	char *path_copy = path, *dir, *full_path;
+	char *env = getenv("PATH");
+	char *path;
+	char *path_copy, *dir, *full_path;
 	int len_dir, len_cmd, result;
+
+	if (!env)
+		return (-1);
+
+	path = strdup(env);
+	path_copy = path;
 
 	if (!path || !*argv)
 		return (-1);
@@ -50,17 +57,20 @@ int ex_path(char **argv)
 		{	pid_t pid = fork();
 
 			if (pid == -1)
-			{	perror("fork");
+			{	
+				perror("fork");
 				free(full_path);
 				return (-1);
 			}
 			else if (pid == 0)
-			{	execve(full_path, argv, environ);
+			{	
+				execve(full_path, argv, environ);
 				perror("execve");
 				_exit(127);
 			}
 			else
-			{	waitpid(pid, NULL, 0);
+			{	
+				waitpid(pid, NULL, 0);
 				free(full_path);
 				free(path);
 				return (1);
