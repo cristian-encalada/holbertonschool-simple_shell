@@ -24,6 +24,16 @@ char **split_str(char *str, const char *delim)
 		return (NULL);
 
 	tok = strtok_r(copy, delim, &comment);
+
+	for (i = 0; tok[i]; i++)
+	{
+		if (tok[i] == ' ')
+		{
+			memmove(&tok[i], &tok[i + 1], strlen(tok) - i);
+		}
+		else
+			break;
+	}
 	while (tok != NULL)
 	{
 		len = strlen(tok);
