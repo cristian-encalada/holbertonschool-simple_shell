@@ -39,9 +39,8 @@ int main(int argc, char **args)
 		system("./logo/logo");		/* Executes the Holberton logo executable */
 	else
 		interactive = 0;
-	read_lines(interactive);
 	
-	return (0);
+	return (read_lines(interactive));
 }
 
 /**
