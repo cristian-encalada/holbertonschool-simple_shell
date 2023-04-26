@@ -16,8 +16,22 @@ char **split_str(char *str, const char *delim)
 
 	/* Make a copy of the input string */
 	copy = strdup(str);
-	if (copy == NULL || strcmp(copy, "") == 0)
+	if (copy == NULL)
 		return (NULL);
+
+	for (i = 0; copy[i]; i++)
+	{	
+		if (copy[i] == ' ')
+			continue;
+		count = 1;
+		break;
+	}
+	if (count == 0)
+	{
+		free(copy);
+		return (NULL);
+	}
+	count = 0;
 
 	array = (char **) malloc((numWords + 1) * sizeof(char *));
 	if (array == NULL)
