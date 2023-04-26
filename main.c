@@ -8,13 +8,29 @@ int last_status;
  *
  * Return: 0 on Success, -1 on Error.
 */
-int main(int argc, char **argv)
+int main(int argc, char **args)
 {
 	signal(SIGINT, sigint_handler);
-	fileName = argv[0];
+
+	fileName = args[0];
+
+	if (args[1])
+	{
+		ex_filecmd(args[1]);
+		return (0);
+	}
+	
+	signal(SIGINT, sigint_handler);
+	fileName = args[0];
+
+	if (args[1])
+	{
+		ex_filecmd(args[1]);
+		return (0);
+	}
 
 	/* Disable Ctrl-C terminal interrupt for interactive shell only */
-	if (isatty(STDIN_FILENO) && argc > 1 && strcmp(argv[1], "-n") == 0)
+	if (isatty(STDIN_FILENO) && argc > 1 && strcmp(args[1], "-n") == 0)
 		system("stty -echoctl");
 
 	if (isatty(STDIN_FILENO))
@@ -22,7 +38,7 @@ int main(int argc, char **argv)
 
 	else
 		return (read_lines_non_interactive());
-
+	
 	return (0);
 }
 
@@ -33,7 +49,7 @@ int main(int argc, char **argv)
 void sigint_handler(int sig)
 {
 	(void) sig;
-	printf("\n$ ");
+	printf("\n%s$ ", get_current_dir());
 	fflush(stdout);
 }
 

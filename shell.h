@@ -49,6 +49,7 @@ void unsetenv_cmd(char **args);
 void cd_cmd(char **args);
 void alias_cmd(char **args);
 void help_cmd(char **args);
+void history_cmd(char **args);
 
 /* main.c */
 int read_lines_interactive(void);
@@ -57,6 +58,7 @@ void sigint_handler(int sig);
 
 /* command_manager.c */
 int call_command(char *command);
+void ex_filecmd(char *file);
 int ex_builtin(char *command, char **args);
 int ex_path(char **argv);
 
@@ -65,6 +67,7 @@ char **split_str(char *str, const char *delim);
 int str_count_words(char *s, const char *delim);
 void free_array(char **arr);
 char *remove_comment(char *str);
+
 /* dir_utils.c */
 char *get_current_dir(void);
 int _getline(char *s, int lim);

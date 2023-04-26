@@ -144,3 +144,14 @@ void help_cmd(char **args)
 
 	fclose(fp);
 }
+
+/**
+ * history_cmd - displays the history list, one command by line
+ *
+ * @args: List of arguments passed to the function.
+ * Return: void.
+ */
+void history_cmd(char **args)
+{
+	(void) args;
+}
