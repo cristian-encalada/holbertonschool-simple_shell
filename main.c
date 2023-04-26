@@ -10,6 +10,8 @@ int last_status;
 */
 int main(int argc, char **args)
 {
+	int interactive = 1;
+
 	signal(SIGINT, sigint_handler);
 
 	fileName = args[0];
@@ -34,10 +36,10 @@ int main(int argc, char **args)
 		system("stty -echoctl");
 
 	if (isatty(STDIN_FILENO))
-		return (read_lines_interactive());
-
+		system("./logo/logo");		/* Executes the Holberton logo executable */
 	else
-		return (read_lines_non_interactive());
+		interactive = 0;
+	read_lines(interactive);
 	
 	return (0);
 }
@@ -54,17 +56,15 @@ void sigint_handler(int sig)
 }
 
 /**
- * read_lines_interactive - Logic for reading user input in interactive mode.
- *
- * Return: 0 on Success,  127 on Error.
- */
-int read_lines_interactive(void)
+ * read_lines - Logic for reading user input.
+ * 
+ * Return: 0 on Success, 127 on Error.
+*/
+int read_lines(int interactive)
 {
 	char *buffer;
 	size_t bufsize = 1024;
 	int chars_read = 0;
-	
-	system("./logo/logo");		/* Executes the Holberton logo executable */
 
 	buffer = (char *) malloc(bufsize * sizeof(char));
 	if (!buffer)
@@ -75,12 +75,15 @@ int read_lines_interactive(void)
 
 	while (1)
 	{
-		printf("%s$ ", get_current_dir());
+		if (interactive)
+			printf("%s$ ", get_current_dir());
+		
 		chars_read = getline(&buffer, &bufsize, stdin);
 
 		if (chars_read == -1)
 		{
-			printf("\n");
+			if (interactive)
+				printf("\n");
 			break; /* End of input stream reached */
 		}
 		if (chars_read == 1 && buffer[0] == '\n')
@@ -100,39 +103,6 @@ int read_lines_interactive(void)
 		}
 		last_status = 0; /* Command was executed successfully */
 	}
-	free(buffer);
-	return (last_status);
-}
-
-/**
- * read_lines_non_interactive - Reading user input in non-interactive mode.
- *
- * Return: 1 on Success, 127 on Error.
-*/
-int read_lines_non_interactive(void)
-{
-	char *buffer;
-	size_t bufsize = 1024;
-	int chars_read = 0;
-	int status, last_status = 0;
-
-	buffer = (char *) malloc(bufsize * sizeof(char));
-	if (!buffer)
-	{
-		_perror(mem, strerror(errno));
-		exit(1);
-	}
-
-	while ((chars_read = getline(&buffer, &bufsize, stdin)) != -1)
-	{
-		buffer[chars_read - 1] = '\0';
-		if (call_command(buffer) == 127)	/* execve failed to execute the command */
-			status = 127;
-		else
-			status = 0;						/* Command was executed successfully */
-		last_status = status;
-	}
-
 	free(buffer);
 	return (last_status);
 }

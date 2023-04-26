@@ -52,8 +52,7 @@ void help_cmd(char **args);
 void history_cmd(char **args);
 
 /* main.c */
-int read_lines_interactive(void);
-int read_lines_non_interactive(void);
+int read_lines(int interactive);
 void sigint_handler(int sig);
 
 /* command_manager.c */
