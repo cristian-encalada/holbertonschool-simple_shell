@@ -50,7 +50,7 @@ char **split_str(char *str, const char *delim)
 		count++;
 	}
 
-	tok = strtok_r(strdup(copy), delim, &comment);
+	tok = strtok_r(copy, delim, &comment);
 
 	for (i = 0; tok[i]; i++)
 	{

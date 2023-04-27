@@ -132,9 +132,7 @@ int call_command(char *command)
 	pid_t pid;
 
 	if (commands == NULL)
-	{
-		return status;
-	}
+		return (status);
 
 	while (commands[i] != NULL)
 	{
@@ -161,6 +159,7 @@ int call_command(char *command)
 		/* Check if the cmd is in PATH*/
 		if (ex_path(argv) == 1)
 		{	
+			free_array(argv);
 			i++;
 			continue;
 		}
