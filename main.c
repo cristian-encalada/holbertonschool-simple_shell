@@ -23,12 +23,6 @@ int main(int argc, char **args)
 	
 	signal(SIGINT, sigint_handler);
 
-	if (args[1])
-	{
-		ex_filecmd(args[1], fileName);
-		return (0);
-	}
-
 	/* Disable Ctrl-C terminal interrupt for interactive shell only */
 	if (isatty(STDIN_FILENO) && argc > 1 && strcmp(args[1], "-n") == 0)
 		system("stty -echoctl");

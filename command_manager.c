@@ -10,14 +10,13 @@ void ex_filecmd(char *file, char *fileName)
 
 	if (!fp)
 	{
-		_perror(custom, "Error: File not found.\n");
+		_perror(custom, "%s: 0: Can't open %s.\n", fileName, file);
 		return;
 	}
 
 	while (fgets(line, 1024, fp))
 	{
 		call_command(line, fileName);
-		putchar('\n');
 	}
 
 	if (fclose(fp) != 0)
