@@ -17,8 +17,7 @@ int main(int argc, char **args)
 
 	if (args[1])
 	{
-		ex_filecmd(args[1], fileName);
-		return (0);
+		return ex_filecmd(args[1], fileName);
 	}
 	
 	signal(SIGINT, sigint_handler);

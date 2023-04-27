@@ -67,7 +67,7 @@ void sigint_handler(int sig);
 
 /* command_manager.c */
 int call_command(char *command, char *fileName);
-void ex_filecmd(char *file, char *fileName);
+int ex_filecmd(char *file, char *fileName);
 int ex_builtin(char *command, char **args);
 int ex_path(char **argv);
 

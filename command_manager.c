@@ -1,7 +1,7 @@
 #include "shell.h"
 
 
-void ex_filecmd(char *file, char *fileName)
+int ex_filecmd(char *file, char *fileName)
 {
 	FILE *fp;
 	char line[1024];
@@ -10,8 +10,8 @@ void ex_filecmd(char *file, char *fileName)
 
 	if (!fp)
 	{
-		_perror(custom, "%s: 0: Can't open %s.\n", fileName, file);
-		return;
+		_perror(custom, "%s: 0: Can't open %s\n", fileName, file);
+		return (127);
 	}
 
 	while (fgets(line, 1024, fp))
@@ -20,7 +20,12 @@ void ex_filecmd(char *file, char *fileName)
 	}
 
 	if (fclose(fp) != 0)
+	{
 		_perror(custom, "Error closing file.\n");
+		return (127);
+	}
+
+	return (0);
 }
 
 /**
