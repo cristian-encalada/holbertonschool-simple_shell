@@ -109,6 +109,8 @@ int read_lines(int interactive)
 		}
 		last_status = 0; /* Command was executed successfully */
 	}
+	/* Free the fileName variable */
+	free(fileName);
 	free(buffer);
 	return (last_status);
 }

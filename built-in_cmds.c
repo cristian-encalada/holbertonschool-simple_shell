@@ -27,9 +27,6 @@ void exit_cmd(char **args)
     /* Free the previous directory */
     free_current_dir(prevDir);
 
-	/* Free the fileName variable */
-	free(fileName);
-
     exit(last_status);
 }
 
