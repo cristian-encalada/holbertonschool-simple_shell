@@ -23,7 +23,7 @@ typedef enum errors
 
 extern char *prevDir;
 extern int last_status;
-
+extern char **environ;
 /**
  * struct command - Struct for commands
  * @cmd: Command name

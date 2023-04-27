@@ -1,5 +1,4 @@
 #include "shell.h"
-extern char **environ;
 
 void ex_filecmd(char *file, char *fileName)
 {
@@ -20,7 +19,8 @@ void ex_filecmd(char *file, char *fileName)
 		putchar('\n');
 	}
 
-	fclose(fp);
+	if (fclose(fp) != 0)
+		_perror(custom, "Error closing file.\n");
 }
 
 /**
@@ -155,7 +155,7 @@ int call_command(char *command, char *fileName)
 			free_array(argv);
 			i++;
 			continue;
-		}	
+		}
 		/* Check if the cmd is in PATH*/
 		if (ex_path(argv) == 1)
 		{	

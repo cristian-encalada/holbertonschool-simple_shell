@@ -11,7 +11,7 @@ void clear_cmd(char **args)
 }
 
 /**
- * exit_cmd - Exit the shell.
+ * exit_cmd - Built-in to exit the shell.
  * @args: Input arguments.
  * Return: void.
 */
