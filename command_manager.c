@@ -143,7 +143,6 @@ int call_command(char *command)
 		if (commands[i][0] == '#')  /* Ignore commands that start with "#" */
 		{
 			i++;
-			free_array(argv);
 			continue;
 		}
 		if (argv == NULL)
@@ -162,7 +161,6 @@ int call_command(char *command)
 		/* Check if the cmd is in PATH*/
 		if (ex_path(argv) == 1)
 		{	
-			free_array(argv);
 			i++;
 			continue;
 		}
@@ -170,7 +168,6 @@ int call_command(char *command)
 		if (pid == -1)
 		{	
 			perror("fork");
-			free(clean_command);
 			free_array(argv);
 			free_array(commands);
 			exit(EXIT_FAILURE); /* terminates the child process if execve fails */
