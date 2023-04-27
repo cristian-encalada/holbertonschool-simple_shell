@@ -143,6 +143,7 @@ void help_cmd(char **args)
 	if (!fp)
 	{
 		_perror(custom, "Error: Unknown command or no help was found.\n");
+		free(file);
 		return;
 	}
 
@@ -152,6 +153,7 @@ void help_cmd(char **args)
 	}
 
 	fclose(fp);
+	free(file);
 }
 
 /**
