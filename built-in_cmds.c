@@ -17,10 +17,20 @@ void clear_cmd(char **args)
 */
 void exit_cmd(char **args)
 {
-	/*if args[1] is not present, last_status will be set to 0*/
-	if (args[1] != NULL)
-		last_status = atoi(args[1]);
-	exit(last_status);
+    /*if args[1] is not present, last_status will be set to 0*/
+    if (args[1] != NULL)
+        last_status = atoi(args[1]);
+
+    /* Free the arguments array */
+    free_array(args);
+
+    /* Free the previous directory */
+    free_current_dir(prevDir);
+
+	/* Free the fileName variable */
+	free(fileName);
+
+    exit(last_status);
 }
 
 /**
