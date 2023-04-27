@@ -20,7 +20,7 @@ typedef enum errors
 	cwd,
 	custom
 } errors_t;
-extern char *fileName;
+
 extern char *prevDir;
 extern int last_status;
 
@@ -55,12 +55,12 @@ void help_cmd(char **args);
 void history_cmd(char **args);
 
 /* main.c */
-int read_lines(int interactive);
+int read_lines(int interactive, char *fileName);
 void sigint_handler(int sig);
 
 /* command_manager.c */
-int call_command(char *command);
-void ex_filecmd(char *file);
+int call_command(char *command, char *fileName);
+void ex_filecmd(char *file, char *fileName);
 int ex_builtin(char *command, char **args);
 int ex_path(char **argv);
 
@@ -74,4 +74,5 @@ char *remove_comment(char *str);
 char *get_current_dir(void);
 int _getline(char *s, int lim);
 void free_current_dir(char *dir);
+
 #endif /* _SHELL_H_ */

@@ -1,5 +1,4 @@
 #include "shell.h"
-char *fileName;
 int last_status;
 /**
  * main - Main entry of the program.
@@ -11,23 +10,21 @@ int last_status;
 int main(int argc, char **args)
 {
 	int interactive = 1;
+	char *fileName = args[0];
 
 	signal(SIGINT, sigint_handler);
 
-	fileName = args[0];
-
 	if (args[1])
 	{
-		ex_filecmd(args[1]);
+		ex_filecmd(args[1], fileName);
 		return (0);
 	}
 	
 	signal(SIGINT, sigint_handler);
-	fileName = args[0];
 
 	if (args[1])
 	{
-		ex_filecmd(args[1]);
+		ex_filecmd(args[1], fileName);
 		return (0);
 	}
 
@@ -40,7 +37,7 @@ int main(int argc, char **args)
 	else
 		interactive = 0;
 	
-	return (read_lines(interactive));
+	return (read_lines(interactive, fileName));
 }
 
 /**
@@ -61,7 +58,7 @@ void sigint_handler(int sig)
  * 
  * Return: 0 on Success, 127 on Error.
 */
-int read_lines(int interactive)
+int read_lines(int interactive, char *fileName)
 {
 	char *buffer;
 	size_t bufsize = 1024;
@@ -102,7 +99,7 @@ int read_lines(int interactive)
 		}
 
 		buffer[chars_read - 1] = '\0';
-		if (call_command(buffer) == 127)	/* execve failed to execute the command */
+		if (call_command(buffer, fileName) == 127)	/* execve failed to execute the command */
 		{
 			last_status = 127;
 			continue; /* Keep the previous value of last_status */

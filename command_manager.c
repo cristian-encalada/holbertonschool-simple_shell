@@ -1,7 +1,7 @@
 #include "shell.h"
 extern char **environ;
 
-void ex_filecmd(char *file)
+void ex_filecmd(char *file, char *fileName)
 {
 	FILE *fp;
 	char line[1024];
@@ -16,7 +16,7 @@ void ex_filecmd(char *file)
 
 	while (fgets(line, 1024, fp))
 	{
-		call_command(line);
+		call_command(line, fileName);
 		putchar('\n');
 	}
 
@@ -121,10 +121,10 @@ int ex_builtin(char *command, char **args)
 /**
  * call_command - Call an executable
  * @command: String containing the command name.
- *
+ * @fileName: The name of the shell executable file.
  * Return: 0 on Success, 127 on Error.
 */
-int call_command(char *command)
+int call_command(char *command, char *fileName)
 {
 	char *clean_command = remove_comment(command);
 	char **commands = split_str(clean_command, ";");

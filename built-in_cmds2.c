@@ -7,7 +7,8 @@
 void cd_cmd(char **args)
 {
 	char *home_dir = getenv("HOME"), *current_dir, *cmd;
-
+	char *fileName = args[0];
+	
 	current_dir = get_current_dir();
 	if (!current_dir)
 	{	_perror(custom, "Error: could not get current directory\n");
@@ -64,7 +65,7 @@ void cd_cmd(char **args)
 		return;
 	}
 	sprintf(cmd, "setenv PWD %s", current_dir);
-	call_command(cmd);
+	call_command(cmd, fileName);
 	free(current_dir);
 	free(cmd);
 }
