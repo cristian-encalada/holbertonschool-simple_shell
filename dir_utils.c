@@ -1,5 +1,4 @@
 #include "shell.h"
-char *prevDir;
 
 /**
  * get_current_dir - Get the current working directory.

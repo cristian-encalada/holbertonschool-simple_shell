@@ -1,4 +1,5 @@
 #include "shell.h"
+
 /**
  * cd_cmd - Changes the current directory of the process.
  * @args: Input arguments.
@@ -8,6 +9,7 @@ void cd_cmd(char **args)
 {
 	char *home_dir = getenv("HOME"), *current_dir, *cmd;
 	char *fileName = args[0];
+	char *prevDir = NULL;
 	
 	current_dir = get_current_dir();
 	if (!current_dir)

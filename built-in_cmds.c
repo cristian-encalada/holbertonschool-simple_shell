@@ -24,9 +24,6 @@ void exit_cmd(char **args)
     /* Free the arguments array */
     free_array(args);
 
-    /* Free the previous directory */
-    free_current_dir(prevDir);
-
     exit(last_status);
 }
 

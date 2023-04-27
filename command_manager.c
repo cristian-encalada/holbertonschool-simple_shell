@@ -1,5 +1,6 @@
 #include "shell.h"
 
+
 void ex_filecmd(char *file, char *fileName)
 {
 	FILE *fp;
@@ -141,6 +142,7 @@ int call_command(char *command, char *fileName)
 		if (commands[i][0] == '#')  /* Ignore commands that start with "#" */
 		{
 			i++;
+			free_array(argv);
 			continue;
 		}
 		if (argv == NULL)
@@ -155,7 +157,7 @@ int call_command(char *command, char *fileName)
 			free_array(argv);
 			i++;
 			continue;
-		}
+		}	
 		/* Check if the cmd is in PATH*/
 		if (ex_path(argv) == 1)
 		{	
