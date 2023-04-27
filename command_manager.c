@@ -177,9 +177,6 @@ int call_command(char *command)
 			if (execve(argv[0], argv, environ) == -1)
 			{	
 				fprintf(stderr, "%s: 1: %s: not found\n", fileName, argv[0]);
-				free(clean_command);
-				free_array(argv);
-				free_array(commands);
 				exit(127);
 			}
 		}
