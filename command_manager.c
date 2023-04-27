@@ -196,7 +196,6 @@ int call_command(char *command)
 		free_array(argv);
 		i++;
 	}
-	free(clean_command);
 	free_array(commands);
 	return (status); /* Return the exit status */
 }
