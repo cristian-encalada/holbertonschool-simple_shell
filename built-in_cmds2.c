@@ -15,12 +15,14 @@ void cd_cmd(char **args)
 	}
 	if (!home_dir)
 	{	_perror(custom, "Error: HOME environment variable not set\n");
+		free(current_dir);
 		return;
 	}
 	if (!args[1])
 	{
 		if (chdir(home_dir) != 0)
 		{	_perror(custom, "Error: could not change directory to %s\n", home_dir);
+			free(current_dir);
 			return;
 		}
 	}
@@ -34,6 +36,7 @@ void cd_cmd(char **args)
 			}
 			if (chdir(prevDir) != 0)
 			{	_perror(custom, "Error: could not change directory to %s\n", prevDir);
+				free(current_dir);
 				return;
 			}
 		}
@@ -41,11 +44,14 @@ void cd_cmd(char **args)
 		{
 			if (chdir(args[1]) != 0)
 			{	_perror(custom, "Error: could not change directory to %s\n", args[1]);
+				free(current_dir);
 				return;
 			}
+			free(prevDir);			/* free previously saved directory */
 			prevDir = strdup(current_dir);
 			if (!prevDir)
 			{	_perror(custom, "Error: could not save previous directory\n");
+				free(current_dir);
 				return;
 			}
 		}
@@ -54,10 +60,13 @@ void cd_cmd(char **args)
 	if (!cmd)
 	{
 		_perror(mem, strerror(errno));
+		free(current_dir);
 		return;
 	}
 	sprintf(cmd, "setenv PWD %s", current_dir);
 	call_command(cmd);
+	free(current_dir);
+	free(cmd);
 }
 
 /**
