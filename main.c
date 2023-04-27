@@ -49,8 +49,10 @@ int main(int argc, char **args)
  */
 void sigint_handler(int sig)
 {
+	char *dir = get_current_dir();
 	(void) sig;
-	printf("\n%s$ ", get_current_dir());
+	printf("\n%s$ ", dir);
+	free_current_dir(dir);
 	fflush(stdout);
 }
 
@@ -75,11 +77,15 @@ int read_lines(int interactive)
 	while (1)
 	{
 		if (interactive)
-			printf("%s$ ", get_current_dir());
+		{
+			char *dir = get_current_dir();
+			printf("%s$ ", dir);
+			free_current_dir(dir);
+		}
 		
 		chars_read = getline(&buffer, &bufsize, stdin);
 
-		if (chars_read == -1)
+		if (chars_read == EOF)
 		{
 			if (interactive)
 				printf("\n");

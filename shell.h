@@ -13,10 +13,13 @@
 #include <errno.h>
 #include <stdarg.h>
 
-enum errors
+typedef enum errors
 {
-	cmd, mem, custom
-};
+	cmd,
+	mem,
+	cwd,
+	custom
+} errors_t;
 extern char *fileName;
 extern char *prevDir;
 extern int last_status;
@@ -70,5 +73,5 @@ char *remove_comment(char *str);
 /* dir_utils.c */
 char *get_current_dir(void);
 int _getline(char *s, int lim);
-
+void free_current_dir(char *dir);
 #endif /* _SHELL_H_ */
