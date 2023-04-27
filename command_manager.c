@@ -4,7 +4,9 @@
 int ex_filecmd(char *file, char *fileName)
 {
 	FILE *fp;
-	char line[1024];
+	char *line = NULL;
+	size_t len = 0;
+	ssize_t read;
 
 	fp = fopen(file, "r");		/* read-only mode */
 
@@ -14,7 +16,7 @@ int ex_filecmd(char *file, char *fileName)
 		return (127);
 	}
 
-	while (fgets(line, 1024, fp))
+	while ((read = getline(&line, &len, fp)) != -1)
 	{
 		call_command(line, fileName);
 	}
