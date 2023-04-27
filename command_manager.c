@@ -133,7 +133,6 @@ int call_command(char *command)
 
 	if (commands == NULL)
 	{
-		free(clean_command);
 		return status;
 	}
 
