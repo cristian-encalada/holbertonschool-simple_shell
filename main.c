@@ -11,6 +11,7 @@ int main(int argc, char **args)
 {
 	int interactive = 1;
 	char *fileName = args[0];
+	loadHistory(); /* Load command history */
 
 	signal(SIGINT, sigint_handler);
 

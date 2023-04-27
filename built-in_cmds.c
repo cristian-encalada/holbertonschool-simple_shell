@@ -24,6 +24,9 @@ void exit_cmd(char **args)
     /* Free the arguments array */
     free_array(args);
 
+		/* Saves the command history */
+		saveHistory();
+
     exit(last_status);
 }
 

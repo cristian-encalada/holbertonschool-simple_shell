@@ -168,4 +168,6 @@ void help_cmd(char **args)
 void history_cmd(char **args)
 {
 	(void) args;
+
+	printHistory();
 }

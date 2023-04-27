@@ -135,6 +135,8 @@ int call_command(char *command, char *fileName)
 	if (commands == NULL)
 		return (status);
 
+	addCmdHistory(command);
+
 	while (commands[i] != NULL)
 	{
 		char **argv = split_str(commands[i], " \t\n\r");

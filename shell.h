@@ -40,6 +40,13 @@ int set_alias(char *name, char *value);
 void print_aliases(void);
 void print_alias(char *arg, char *name, char *value);
 
+/* history_utils.c */
+char **getHistory();
+void printHistory();
+int saveHistory();
+char **loadHistory();
+void addCmdHistory(char *cmd);
+
 /* errors.c */
 void _perror(enum errors err, char *s, ...);
 
