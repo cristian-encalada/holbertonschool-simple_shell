@@ -62,7 +62,7 @@ void setenv_cmd(char **args)
 
 	if (!args[1] || !args[2])
 	{
-		_perror(cmd, "setenv (var) (name)");
+		_perror(cmd, "setenv (var) (value)");
 		return;
 	}
 	name = args[1];

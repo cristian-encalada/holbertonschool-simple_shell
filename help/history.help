@@ -1,0 +1,8 @@
+history: history
+    Prints the history of commands.
+    
+    When executing a command it is registered in the history for later use.
+		On exiting the shell all the commands executed during the session will be saved in a file.
+    
+    Exit Status:
+    Returns 0.

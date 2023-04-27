@@ -87,7 +87,6 @@ void alias_cmd(char **args)
 	{
 		/* Print all aliases */
 		print_aliases();
-		putchar('\n');
 		return;
 	}
 

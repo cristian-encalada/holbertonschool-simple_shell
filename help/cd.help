@@ -1,7 +1,7 @@
-cd: cd [-L|[-P [-e]] [-@]] [dir]
+cd: cd [[-] [dir]]
     Change the shell working directory.
     
-    Change the current directory to DIR.  The default DIR is the value of the
+    Change the current directory to DIR. The default DIR is the value of the
     HOME shell variable.
     
     The variable CDPATH defines the search path for the directory containing
@@ -14,21 +14,7 @@ cd: cd [-L|[-P [-e]] [-@]] [dir]
     its value is used for DIR.
     
     Options:
-      -L	force symbolic links to be followed: resolve symbolic
-    		links in DIR after processing instances of `..'
-      -P	use the physical directory structure without following
-    		symbolic links: resolve symbolic links in DIR before
-    		processing instances of `..'
-      -e	if the -P option is supplied, and the current working
-    		directory cannot be determined successfully, exit with
-    		a non-zero status
-      -@	on systems that support it, present a file with extended
-    		attributes as a directory containing the file attributes
-    
-    The default is to follow symbolic links, as if `-L' were specified.
-    `..' is processed by removing the immediately previous pathname component
-    back to a slash or the beginning of DIR.
+      -		Go to the previous pwd.
     
     Exit Status:
-    Returns 0 if the directory is changed, and if $PWD is set successfully when
-    -P is used; non-zero otherwise.
+    Returns 0 if the directory is changed; non-zero otherwise.

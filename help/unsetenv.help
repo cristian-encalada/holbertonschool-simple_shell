@@ -1,0 +1,7 @@
+unsetenv: unsetenv (var)
+    Removes an environment variable if exists.
+    
+    If the environ variables does not exists it prints an error.
+    
+    Exit Status:
+    Returns 0.

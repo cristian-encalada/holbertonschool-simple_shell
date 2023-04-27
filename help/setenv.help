@@ -1,0 +1,7 @@
+setenv: setenv [var] [value]
+    Sets an environment variable.
+    
+    If the environ variable to set is already set it replaces its value with the new [value].
+    
+    Exit Status:
+    Returns 0.

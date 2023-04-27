@@ -1,0 +1,7 @@
+clear: clear
+    Clears the console.
+    
+    Uses a system call to clear the user terminal.
+    
+    Exit Status:
+    Returns 0.
