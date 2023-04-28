@@ -31,18 +31,13 @@ void printHistory()
 		printf("%d - %s\n", i, history[i]);
 }
 
-/**
- * addCmdHistory - Add a command to the history.
- * 
- * @cmd: Command line to be added with arguments or not.
- * Return: void
-*/
 void addCmdHistory(char *cmd)
 {
 	unsigned int len = 0;
 	char *cmd_copy;
+	char **new_content = NULL;
 
-	if (cmd == NULL || history == NULL)
+	if (!cmd || !history)
 		return;
 
 	cmd_copy = strdup(cmd);
@@ -59,25 +54,30 @@ void addCmdHistory(char *cmd)
 		return;
 	}
 
-	history = realloc(history, sizeof(char *) * (len + 2));
+	new_content = calloc(len + 2, sizeof(char *));
 
-	if (!history)
+	if (!new_content)
 	{
 		_perror(mem, "Couldn't allocate mem for the new cmd.");
 		return;
 	}
 
-	history[len] = malloc(sizeof(char) * strlen(cmd_copy) + 1);
+	memcpy(new_content, history, len * sizeof(char *));
+	new_content[len] = malloc(sizeof(char) * strlen(cmd_copy) + 1);
 
-	if (!history[len])
+	if (!new_content[len])
 	{
 		_perror(mem, "Couldn't allocate mem for the new cmd.");
+		free(new_content);
 		return;
 	}
 
-	strcpy(history[len], cmd_copy);
+	strcpy(new_content[len], cmd_copy);
+	free(history);
+	history = new_content;
 	free(cmd_copy);
 }
+
 
 /**
  * saveHistory - Save the command history in a file.
@@ -142,7 +142,7 @@ void loadHistory()
 			continue;
 		}
 		
-		new_content = realloc(content, sizeof(char *) * (content_size + 2));
+		new_content = calloc(content_size + 2, sizeof(char *));
 		if (!new_content)
 		{
 			_perror(mem, "Error: Could not allocate memory");
@@ -150,7 +150,10 @@ void loadHistory()
 			free_array(content); 
 			return;
 		}
+		memcpy(new_content, content, sizeof(char *) * content_size);
+		free(content);
 		content = new_content;
+
 		content[content_size] = malloc((line_len + 1) * sizeof(char));
 		if (!content[content_size])
 		{
@@ -184,5 +187,6 @@ void loadHistory()
 	}
 	
 	fclose(fp);
+	
 	history = content;
 }

@@ -152,12 +152,13 @@ int call_command(char *command, char *fileName)
 	char **argv;
 
 	commands = split_str(clean_command, ";");
-	free(command);
 	
 	if (commands == NULL)
 		return (status);
 
 	addCmdHistory(command);
+
+	free(command);
 
 	while (commands[i] != NULL)
 	{
