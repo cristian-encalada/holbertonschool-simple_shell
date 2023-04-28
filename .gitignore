@@ -2,3 +2,4 @@ compile.sh
 hsh
 .vscode
 a.out
+valgrind.sh

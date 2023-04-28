@@ -42,8 +42,17 @@ void addCmdHistory(char *cmd)
 	unsigned int len = 0;
 	char *cmd_copy;
 
-	if (cmd == NULL || history == NULL)
+	if (cmd == NULL)
 		return;
+
+	if (history == NULL)
+		history = malloc(sizeof(char*) * 1);
+
+	if (!history)
+	{
+		_perror(mem, "Error: Could not allocate memory");
+		return;
+	}
 
 	cmd_copy = strdup(cmd);
 
@@ -76,6 +85,7 @@ void addCmdHistory(char *cmd)
 	}
 
 	strcpy(history[len], cmd_copy);
+	free(cmd_copy);
 }
 
 /**
@@ -92,6 +102,12 @@ int saveHistory()
 	{
 		_perror(custom, "Error: Could not access history file.\n");
 		return (-1);
+	}
+
+	if (!history)
+	{
+		fclose(fp);
+		return (0);
 	}
 	
 	for (; history[i]; i++)
@@ -143,18 +159,17 @@ char **loadHistory()
 		{
 			_perror(mem, "Error: Could not allocate memory");
 			fclose(fp);
-			free_array(content); 
+			free_array(content);
 			return (NULL);
 		}
 		content = new_content;
 		content[content_size] = malloc((line_len + 1) * sizeof(char));
 		if (!content[content_size])
 		{
-			free(content);
-			content = NULL;
-			_perror(mem, "Error: Could not allocate memory");
-			fclose(fp);
 			free_array(content);
+			content = NULL;
+			fclose(fp);
+			_perror(mem, "Error: Could not allocate memory");
 			return (NULL);
 		}
 		
@@ -171,12 +186,9 @@ char **loadHistory()
 	}
 
 	if (content == NULL)
-		content = malloc(sizeof(char*) * 1);
-
-	if (content == NULL)
 	{
 		_perror(mem, "Error: Could not allocate memory");
-		free_array(content);
+		free_array(new_content);
 		return (NULL);
 	}
 	
