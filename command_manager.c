@@ -84,7 +84,6 @@ int ex_path(char **argv)
 			{	
 				execve(full_path, argv, environ);
 				perror("execve");
-				free_array(argv);
 				_exit(127);
 			}
 			else
@@ -186,23 +185,23 @@ int call_command(char *command, char *fileName)
 				char *val;
 				if (strcmp(var, "$$") == 0)
 				{
-					val = malloc(10);		/* allocate space for pid */
+					val = malloc(10);       /* allocate space for pid */
 					sprintf(val, "%d", getpid());
-				} 
+				}
 				else if (strcmp(var, "$?") == 0)
 				{
-					val = malloc(10);		/* allocate space for exit status */
+					val = malloc(10);       /* allocate space for exit status */
 					sprintf(val, "%d", last_status);
 				}
 				else
 					val = getenv(var + 1);
 				if (val != NULL)
+				{
+					free(argv[j]);         /* free the old argv[j] */
 					argv[j] = val;
-      			else
- 		           argv[j] = "";
-				if (strcmp(var, "$$") == 0 || strcmp(var, "$?") == 0) {
-           			free(val);
-        }
+				}
+				else
+					free(val);              /* free the unused val */
 			}
 		}
 		/* Check if the cmd is built-in */
