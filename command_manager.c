@@ -84,6 +84,7 @@ int ex_path(char **argv)
 			{	
 				execve(full_path, argv, environ);
 				perror("execve");
+				free_array(argv);
 				_exit(127);
 			}
 			else
@@ -91,7 +92,8 @@ int ex_path(char **argv)
 				waitpid(pid, NULL, 0);
 				free(full_path);
 				free(path);
-				free_array(argv);
+
+					free_array(argv);
 				return (1);
 			}
 		}
@@ -146,9 +148,10 @@ int ex_builtin(char *command, char **args)
 int call_command(char *command, char *fileName)
 {
 	char *clean_command = remove_comment(command);
-	int i = 0, status = 0, j = 0;
+	int i = 0, status = 0, j = 0, prev_status = 0;
 	pid_t pid;
 	char **argv;
+	char *temp_command; /* hold the original command for printing */
 
 	commands = split_str(clean_command, ";");
 	
@@ -161,6 +164,8 @@ int call_command(char *command, char *fileName)
 
 	while (commands[i] != NULL)
 	{
+		temp_command = strdup(commands[i]); /* save the original command for printing */
+
 		argv = split_str(commands[i], " \t\n\r");
 
 		if (commands[i][0] == '#')  /* Ignore commands that start with "#" */
@@ -217,6 +222,51 @@ int call_command(char *command, char *fileName)
 			i++;
 			continue;
 		}
+
+	    /* Evaluate the logical operators && and || */
+        if (strcmp(argv[0], "&&") == 0)
+        {
+            /* If the previous command succeeded, execute the current command */
+            if (prev_status == 0)
+            {
+                free_array(argv);
+                i++;
+                continue;
+            }
+            else
+            {
+                /* Skip the current command */
+                fprintf(stderr, "%s: %d: %s: command not found\n", fileName, i+1, temp_command);
+                free_array(argv);
+                free(temp_command);
+                free(clean_command);
+                free_array(commands);
+                saveHistory();
+                return (127);
+            }
+        }
+        else if (strcmp(argv[0], "||") == 0)
+        {
+            /* If the previous command failed, execute the current command */
+            if (prev_status != 0)
+            {
+                free_array(argv);
+                i++;
+                continue;
+            }
+            else
+            {
+                /* Skip the current command */
+                fprintf(stderr, "%s: %d: %s: command not found\n", fileName, i+1, temp_command);
+                free_array(argv);
+                free(temp_command);
+                free(clean_command);
+                free_array(commands);
+                saveHistory();
+                return (127);
+            }
+        }
+
 		pid = fork();
 		if (pid == -1)
 		{	
@@ -224,6 +274,7 @@ int call_command(char *command, char *fileName)
 			free_array(argv);
 			free_array(commands);
 			free(clean_command);
+			free(temp_command);
 			saveHistory();
 			exit(EXIT_FAILURE); /* terminates the child process if execve fails */
 		}
@@ -234,6 +285,7 @@ int call_command(char *command, char *fileName)
 				fprintf(stderr, "%s: 1: %s: not found\n", fileName, argv[0]);
 				free_array(commands);
 				free_array(argv);
+				free(temp_command);
 				saveHistory();
 				exit(127);
 			}
@@ -245,8 +297,10 @@ int call_command(char *command, char *fileName)
 				status = WEXITSTATUS(status); /* Get the status of the child process */
 		}
 		free_array(argv);
+		free(temp_command);
 		i++;
 	}
+	free(temp_command);
 	free_array(commands);
 	return (status); /* Return the exit status */
 }
