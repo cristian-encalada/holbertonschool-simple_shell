@@ -21,7 +21,6 @@ typedef enum errors
 	custom
 } errors_t;
 
-extern char *prevDir;
 extern int last_status;
 extern char **environ;
 /**

@@ -9,10 +9,10 @@ int last_status;
 */
 int main(int argc, char **args)
 {
+	char *fileName 	= args[0];
 	int interactive = 1;
-	char *fileName = args[0];
-	loadHistory(); /* Load command history */
 
+	loadHistory(); /* Load command history */
 	signal(SIGINT, sigint_handler);
 
 	if (args[1])
