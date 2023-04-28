@@ -168,6 +168,16 @@ char **loadHistory()
 		free_array(content);
 		return (NULL);
 	}
+
+	if (content == NULL)
+		content = malloc(sizeof(char*) * 1);
+
+	if (content == NULL)
+	{
+		_perror(mem, "Error: Could not allocate memory");
+		free_array(content);
+		return (NULL);
+	}
 	
 	fclose(fp);
 	history = content;
