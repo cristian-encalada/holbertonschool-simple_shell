@@ -142,7 +142,7 @@ int call_command(char *command, char *fileName)
 {
 	char *clean_command = remove_comment(command);
 	char **commands = split_str(clean_command, ";");
-	int i = 0, status = 0;
+	int i = 0, status = 0, j = 0;
 	pid_t pid;
 
 	if (commands == NULL)
@@ -166,6 +166,19 @@ int call_command(char *command, char *fileName)
 			free_array(commands);
 			return (127);
 		}
+
+		/* Handle variable replacement */
+		for (j = 1; argv[j] != NULL; j++)
+		{
+			char *var = argv[j];
+			if (var[0] == '$')
+			{
+				char *val = getenv(var+1);
+				if (val != NULL)
+					argv[j] = val;
+			}
+		}
+
 		/* Check if the cmd is built-in */
 		if (ex_builtin(argv[0], argv) == 1)
 		{	
@@ -176,7 +189,7 @@ int call_command(char *command, char *fileName)
 		/* Check if the cmd is in PATH*/
 		if (ex_path(argv) == 1)
 		{	
-			free_array(argv);
+
 			i++;
 			continue;
 		}
