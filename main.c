@@ -85,6 +85,7 @@ int read_lines(int interactive, char *fileName)
 		{
 			if (interactive)
 				printf("\n");
+			saveHistory();
 			break; /* End of input stream reached */
 		}
 

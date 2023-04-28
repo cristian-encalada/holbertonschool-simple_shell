@@ -224,6 +224,7 @@ int call_command(char *command, char *fileName)
 			free_array(argv);
 			free_array(commands);
 			free(clean_command);
+			saveHistory();
 			exit(EXIT_FAILURE); /* terminates the child process if execve fails */
 		}
 		else if (pid == 0)
