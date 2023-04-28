@@ -86,15 +86,20 @@ int read_lines(int interactive, char *fileName)
 			if (interactive)
 				printf("\n");
 			saveHistory();
+			free(buffer);
 			break; /* End of input stream reached */
 		}
 
 		if (chars_read == 1 && buffer[0] == '\n')
+		{
+			free(buffer);
 			continue; /* Empty input string, read the next line */
+		}
 
 		if (buffer[chars_read - 1] != '\n')
 		{
 			printf("\n");
+			free(buffer);
 			continue;	/* read the next line */
 		}
 
@@ -106,8 +111,6 @@ int read_lines(int interactive, char *fileName)
 		}
 		last_status = 0; /* Command was executed successfully */
 	}
-	/* Free the fileName variable */
-	if (buffer)
-		free(buffer);
+	
 	return (last_status);
 }

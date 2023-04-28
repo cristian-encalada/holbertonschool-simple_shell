@@ -160,7 +160,6 @@ void loadHistory()
 			free(content);
 			_perror(mem, "Error: Could not allocate memory");
 			fclose(fp);
-			free_array(content);
 			return;
 		}
 		

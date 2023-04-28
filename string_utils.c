@@ -29,6 +29,7 @@ char **split_str(char *str, const char *delim)
 	if (count == 0)
 	{
 		free(copy);
+		free(str);
 		return (NULL);
 	}
 	count = 0;
