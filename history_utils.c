@@ -42,7 +42,7 @@ void addCmdHistory(char *cmd)
 	unsigned int len = 0;
 	char *cmd_copy;
 
-	if (cmd == NULL)
+	if (cmd == NULL || history == NULL)
 		return;
 
 	cmd_copy = strdup(cmd);
@@ -148,6 +148,7 @@ char **loadHistory()
 		content[content_size] = malloc((line_len + 1) * sizeof(char));
 		if (!content[content_size])
 		{
+			free(content);
 			_perror(mem, "Error: Could not allocate memory");
 			return (NULL);
 		}

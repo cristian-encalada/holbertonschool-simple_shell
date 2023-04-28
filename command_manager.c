@@ -1,6 +1,13 @@
 #include "shell.h"
 
-
+/**
+ * ex_filecmd - Executes all the commands in a file.
+ * 
+ * @file: File to read from.
+ * @fileName: Executable file.
+ * 
+ * Return: Exit status. 0 on Success, 127 on Error.
+*/
 int ex_filecmd(char *file, char *fileName)
 {
 	FILE *fp;

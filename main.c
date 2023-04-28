@@ -3,7 +3,7 @@ int last_status;
 /**
  * main - Main entry of the program.
  * @argc: amount of arguments passed.
- * @argv: an array of arguments.
+ * @args: an array of arguments.
  *
  * Return: 0 on Success, -1 on Error.
 */
@@ -49,6 +49,9 @@ void sigint_handler(int sig)
 
 /**
  * read_lines - Logic for reading user input.
+ * 
+ * @interactive: 1 if interactive mode is enabled, 0 otherwise.
+ * @fileName: Name of the executable file.
  * 
  * Return: 0 on Success, 127 on Error.
 */
