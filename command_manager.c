@@ -182,12 +182,28 @@ int call_command(char *command, char *fileName)
 			char *var = argv[j];
 			if (var[0] == '$')
 			{
-				char *val = getenv(var+1);
+				char *val;
+				if (strcmp(var, "$$") == 0)
+				{
+					val = malloc(10);		/* allocate space for pid */
+					sprintf(val, "%d", getpid());
+				} 
+				else if (strcmp(var, "$?") == 0)
+				{
+					val = malloc(10);		/* allocate space for exit status */
+					sprintf(val, "%d", last_status);
+				}
+				else
+					val = getenv(var + 1);
 				if (val != NULL)
 					argv[j] = val;
+      			else
+ 		           argv[j] = "";
+				if (strcmp(var, "$$") == 0 || strcmp(var, "$?") == 0) {
+           			free(val);
+        }
 			}
 		}
-
 		/* Check if the cmd is built-in */
 		if (ex_builtin(argv[0], argv) == 1)
 		{	
