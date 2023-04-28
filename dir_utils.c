@@ -47,5 +47,6 @@ char *get_current_dir(void)
  */
 void free_current_dir(char *dir)
 {
-  free(dir);
+	if (dir)
+	  free(dir);
 }

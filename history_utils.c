@@ -142,6 +142,8 @@ char **loadHistory()
 		if (!new_content)
 		{
 			_perror(mem, "Error: Could not allocate memory");
+			fclose(fp);
+			free_array(content); 
 			return (NULL);
 		}
 		content = new_content;
@@ -149,6 +151,8 @@ char **loadHistory()
 		if (!content[content_size])
 		{
 			_perror(mem, "Error: Could not allocate memory");
+			fclose(fp);
+			free_array(content);
 			return (NULL);
 		}
 		
@@ -160,15 +164,7 @@ char **loadHistory()
 	{
 		_perror(custom, "Error: Could not read history file");
 		fclose(fp);
-		return (NULL);
-	}
-
-	if (content == NULL)
-		content = malloc(sizeof(char*) * 1);
-	
-	if (content == NULL)
-	{
-		_perror(mem, "Error: Could not allocate memory");
+		free_array(content);
 		return (NULL);
 	}
 	
