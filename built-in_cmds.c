@@ -41,7 +41,6 @@ void exit_cmd(char **args)
 void env_cmd(char **args)
 {
 	unsigned int i = 0;
-	extern char **environ;
 
 	(void) args;
 	for (; environ[i] != NULL; i++)

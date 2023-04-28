@@ -47,7 +47,7 @@ int ex_filecmd(char *file, char *fileName)
  */
 int ex_path(char **argv)
 {
-	char *env = getenv("PATH");
+	char *env = _getenv("PATH");
 	char *path;
 	char *path_copy, *dir, *full_path;
 	int len_dir, len_cmd, result;

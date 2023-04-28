@@ -81,5 +81,6 @@ char *remove_comment(char *str);
 char *get_current_dir(void);
 int _getline(char *s, int lim);
 void free_current_dir(char *dir);
+char *_getenv(const char *name);
 
 #endif /* _SHELL_H_ */
