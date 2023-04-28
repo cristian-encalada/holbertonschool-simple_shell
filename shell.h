@@ -44,7 +44,7 @@ void print_alias(char *arg, char *name, char *value);
 char **getHistory();
 void printHistory();
 int saveHistory();
-char **loadHistory();
+void loadHistory();
 void addCmdHistory(char *cmd);
 
 /* errors.c */
@@ -70,6 +70,7 @@ int call_command(char *command, char *fileName);
 int ex_filecmd(char *file, char *fileName);
 int ex_builtin(char *command, char **args);
 int ex_path(char **argv);
+void free_commands();
 
 /* string_utils.c */
 char **split_str(char *str, const char *delim);

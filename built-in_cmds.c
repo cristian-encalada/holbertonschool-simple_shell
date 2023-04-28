@@ -17,17 +17,20 @@ void clear_cmd(char **args)
 */
 void exit_cmd(char **args)
 {
-    /*if args[1] is not present, last_status will be set to 0*/
-    if (args[1] != NULL)
-        last_status = atoi(args[1]);
+	/*if args[1] is not present, last_status will be set to 0*/
+	if (args[1] != NULL)
+		last_status = atoi(args[1]);
 
-    /* Free the arguments array */
-    free_array(args);
+	/* Free the arguments array */
+	free_array(args);
 
-		/* Saves the command history */
-		saveHistory();
+	/* Saves the command history */
+	saveHistory();
 
-    exit(last_status);
+	/* Free commands array */
+	free_commands();
+
+	exit(last_status);
 }
 
 /**

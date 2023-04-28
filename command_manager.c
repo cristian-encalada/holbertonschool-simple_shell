@@ -1,5 +1,7 @@
 #include "shell.h"
 
+char **commands = NULL;
+
 /**
  * ex_filecmd - Executes all the commands in a file.
  * 
@@ -68,18 +70,21 @@ int ex_path(char **argv)
 		sprintf(full_path, "%s/%s", dir, *argv);
 		result = access(full_path, X_OK);
 		if (result == 0)
-		{	pid_t pid = fork();
+		{	
+			pid_t pid = fork();
 
 			if (pid == -1)
 			{	
 				perror("fork");
 				free(full_path);
+				free_array(argv);
 				return (-1);
 			}
 			else if (pid == 0)
 			{	
 				execve(full_path, argv, environ);
 				perror("execve");
+				free_array(argv);
 				_exit(127);
 			}
 			else
@@ -87,6 +92,7 @@ int ex_path(char **argv)
 				waitpid(pid, NULL, 0);
 				free(full_path);
 				free(path);
+				free_array(argv);
 				return (1);
 			}
 		}
@@ -141,10 +147,13 @@ int ex_builtin(char *command, char **args)
 int call_command(char *command, char *fileName)
 {
 	char *clean_command = remove_comment(command);
-	char **commands = split_str(clean_command, ";");
 	int i = 0, status = 0, j = 0;
 	pid_t pid;
+	char **argv;
 
+	commands = split_str(clean_command, ";");
+	free(command);
+	
 	if (commands == NULL)
 		return (status);
 
@@ -152,7 +161,7 @@ int call_command(char *command, char *fileName)
 
 	while (commands[i] != NULL)
 	{
-		char **argv = split_str(commands[i], " \t\n\r");
+		argv = split_str(commands[i], " \t\n\r");
 
 		if (commands[i][0] == '#')  /* Ignore commands that start with "#" */
 		{
@@ -188,8 +197,7 @@ int call_command(char *command, char *fileName)
 		}	
 		/* Check if the cmd is in PATH*/
 		if (ex_path(argv) == 1)
-		{	
-
+		{
 			i++;
 			continue;
 		}
@@ -199,6 +207,7 @@ int call_command(char *command, char *fileName)
 			perror("fork");
 			free_array(argv);
 			free_array(commands);
+			free(clean_command);
 			exit(EXIT_FAILURE); /* terminates the child process if execve fails */
 		}
 		else if (pid == 0)
@@ -206,6 +215,9 @@ int call_command(char *command, char *fileName)
 			if (execve(argv[0], argv, environ) == -1)
 			{	
 				fprintf(stderr, "%s: 1: %s: not found\n", fileName, argv[0]);
+				free_array(commands);
+				free_array(argv);
+				saveHistory();
 				exit(127);
 			}
 		}
@@ -220,4 +232,10 @@ int call_command(char *command, char *fileName)
 	}
 	free_array(commands);
 	return (status); /* Return the exit status */
+}
+
+void free_commands()
+{
+	if (commands)
+		free_array(commands);
 }

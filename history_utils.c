@@ -42,17 +42,8 @@ void addCmdHistory(char *cmd)
 	unsigned int len = 0;
 	char *cmd_copy;
 
-	if (cmd == NULL)
+	if (cmd == NULL || history == NULL)
 		return;
-
-	if (history == NULL)
-		history = malloc(sizeof(char*) * 1);
-
-	if (!history)
-	{
-		_perror(mem, "Error: Could not allocate memory");
-		return;
-	}
 
 	cmd_copy = strdup(cmd);
 
@@ -104,11 +95,8 @@ int saveHistory()
 		return (-1);
 	}
 
-	if (!history)
-	{
-		fclose(fp);
-		return (0);
-	}
+	if (history == NULL)
+		return (-1);
 	
 	for (; history[i]; i++)
 	{
@@ -124,9 +112,9 @@ int saveHistory()
 /**
  * loadHistory - Loads the command history from the file to the variable.
  * 
- * Return: An array of commands or NULL on Error.
+ * Return: void.
 */
-char **loadHistory()
+void loadHistory()
 {
 	char line[1024];
 	char **content = NULL;
@@ -137,7 +125,7 @@ char **loadHistory()
 	if (!fp)
 	{
 		_perror(custom, "Error: Could not access history file");
-		return (NULL);
+		return;
 	}
 
 	while (fgets(line, sizeof(line), fp))
@@ -159,18 +147,18 @@ char **loadHistory()
 		{
 			_perror(mem, "Error: Could not allocate memory");
 			fclose(fp);
-			free_array(content);
-			return (NULL);
+			free_array(content); 
+			return;
 		}
 		content = new_content;
 		content[content_size] = malloc((line_len + 1) * sizeof(char));
 		if (!content[content_size])
 		{
-			free_array(content);
-			content = NULL;
-			fclose(fp);
+			free(content);
 			_perror(mem, "Error: Could not allocate memory");
-			return (NULL);
+			fclose(fp);
+			free_array(content);
+			return;
 		}
 		
 		strcpy(content[content_size], line);
@@ -182,17 +170,19 @@ char **loadHistory()
 		_perror(custom, "Error: Could not read history file");
 		fclose(fp);
 		free_array(content);
-		return (NULL);
+		return;
 	}
+
+	if (content == NULL)
+		content = malloc(sizeof(char*) * 1);
 
 	if (content == NULL)
 	{
 		_perror(mem, "Error: Could not allocate memory");
-		free_array(new_content);
-		return (NULL);
+		free_array(content);
+		return;
 	}
 	
 	fclose(fp);
 	history = content;
-	return (content);
 }

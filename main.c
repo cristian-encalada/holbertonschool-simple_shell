@@ -1,5 +1,7 @@
 #include "shell.h"
+
 int last_status;
+
 /**
  * main - Main entry of the program.
  * @argc: amount of arguments passed.
@@ -11,6 +13,7 @@ int main(int argc, char **args)
 {
 	int interactive = 1;
 	char *fileName = args[0];
+	
 	loadHistory(); /* Load command history */
 
 	signal(SIGINT, sigint_handler);
@@ -61,13 +64,6 @@ int read_lines(int interactive, char *fileName)
 	size_t bufsize = 1024;
 	int chars_read = 0;
 
-	buffer = (char *) malloc(bufsize * sizeof(char));
-	if (!buffer)
-	{
-		_perror(mem, strerror(errno));
-		exit(1);
-	}
-
 	while (1)
 	{
 		if (interactive)
@@ -75,6 +71,13 @@ int read_lines(int interactive, char *fileName)
 			char *dir = get_current_dir();
 			printf("%s$ ", dir);
 			free_current_dir(dir);
+		}
+
+		buffer = (char *) malloc(bufsize * sizeof(char));
+		if (!buffer)
+		{
+			_perror(mem, strerror(errno));
+			exit(1);
 		}
 		
 		chars_read = getline(&buffer, &bufsize, stdin);
@@ -92,7 +95,7 @@ int read_lines(int interactive, char *fileName)
 		if (buffer[chars_read - 1] != '\n')
 		{
 			printf("\n");
-			continue;						/* read the next line */
+			continue;	/* read the next line */
 		}
 
 		buffer[chars_read - 1] = '\0';
@@ -104,6 +107,7 @@ int read_lines(int interactive, char *fileName)
 		last_status = 0; /* Command was executed successfully */
 	}
 	/* Free the fileName variable */
-	free(buffer);
+	if (buffer)
+		free(buffer);
 	return (last_status);
 }

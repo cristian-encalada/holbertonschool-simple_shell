@@ -159,6 +159,9 @@ void free_array(char **arr)
 {
 	int i = 0;
 
+	if (arr == NULL)
+		return;
+
 	for (; arr[i] != NULL; i++)
 		free(arr[i]);
 	free(arr);
