@@ -29,14 +29,16 @@ char **split_str(char *str, const char *delim)
 	if (count == 0)
 	{
 		free(copy);
-		free(str);
 		return (NULL);
 	}
 	count = 0;
 
 	array = (char **) malloc((numWords + 1) * sizeof(char *));
 	if (array == NULL)
+	{
+		free(copy);
 		return (NULL);
+	}
 
 	/* Check if the string starts with a colon */
 	if (copy[0] == ':') 

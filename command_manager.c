@@ -161,6 +161,7 @@ int call_command(char *command, char *fileName)
 	addCmdHistory(command);
 
 	free(command);
+	
 
 	while (commands[i] != NULL)
 	{
@@ -172,12 +173,14 @@ int call_command(char *command, char *fileName)
 		{
 			i++;
 			free_array(argv);
+			free(temp_command);
 			continue;
 		}
 		if (argv == NULL)
 		{
 			free(clean_command);
 			free_array(commands);
+			free(temp_command);
 			return (127);
 		}
 
@@ -211,7 +214,8 @@ int call_command(char *command, char *fileName)
 		}
 		/* Check if the cmd is built-in */
 		if (ex_builtin(argv[0], argv) == 1)
-		{	
+		{
+			free(temp_command);	
 			free_array(argv);
 			i++;
 			continue;
@@ -219,6 +223,7 @@ int call_command(char *command, char *fileName)
 		/* Check if the cmd is in PATH*/
 		if (ex_path(argv) == 1)
 		{
+			free(temp_command);
 			i++;
 			continue;
 		}
@@ -230,6 +235,7 @@ int call_command(char *command, char *fileName)
             if (prev_status == 0)
             {
                 free_array(argv);
+				free(temp_command);
                 i++;
                 continue;
             }
@@ -251,6 +257,7 @@ int call_command(char *command, char *fileName)
             if (prev_status != 0)
             {
                 free_array(argv);
+				free(temp_command);
                 i++;
                 continue;
             }
@@ -300,7 +307,6 @@ int call_command(char *command, char *fileName)
 		free(temp_command);
 		i++;
 	}
-	free(temp_command);
 	free_array(commands);
 	return (status); /* Return the exit status */
 }
