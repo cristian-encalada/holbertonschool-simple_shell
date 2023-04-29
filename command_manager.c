@@ -1,7 +1,6 @@
 #include "shell.h"
 
 char **commands = NULL;
-char *temp_command = NULL;
 
 /**
  * ex_filecmd - Executes all the commands in a file.
@@ -149,11 +148,11 @@ int ex_builtin(char *command, char **args)
 int call_command(char *command, char *fileName)
 {
 	char *clean_command = remove_comment(command);
-	int i = 0, status = 0, j = 0, prev_status = 0;
+	int i = 0, status = 0, j = 0, ret = -1, prev_cmd_failed = 0;
 	pid_t pid;
 	char **argv;
 
-	commands = split_str(clean_command, ";");
+	commands = split_str(clean_command, ";&|");
 	
 	if (commands == NULL)
 	{
@@ -166,22 +165,18 @@ int call_command(char *command, char *fileName)
 
 	while (commands[i] != NULL)
 	{
-		temp_command = strdup(commands[i]); /* save the original command for printing */
-
 		argv = split_str(commands[i], " \t\n\r");
 
 		if (commands[i][0] == '#')  /* Ignore commands that start with "#" */
 		{
 			i++;
 			free_array(argv);
-			free(temp_command);
 			continue;
 		}
 		if (argv == NULL)
 		{
 			free(clean_command);
 			free_array(commands);
-			free(temp_command);
 			return (127);
 		}
 
@@ -216,7 +211,6 @@ int call_command(char *command, char *fileName)
 		/* Check if the cmd is built-in */
 		if (ex_builtin(argv[0], argv) == 1)
 		{
-			free(temp_command);	
 			free_array(argv);
 			i++;
 			continue;
@@ -224,56 +218,9 @@ int call_command(char *command, char *fileName)
 		/* Check if the cmd is in PATH*/
 		if (ex_path(argv) == 1)
 		{
-			free(temp_command);
 			i++;
 			continue;
 		}
-
-	    /* Evaluate the logical operators && and || */
-        if (strcmp(argv[0], "&&") == 0)
-        {
-            /* If the previous command succeeded, execute the current command */
-            if (prev_status == 0)
-            {
-                free_array(argv);
-								free(temp_command);
-                i++;
-                continue;
-            }
-            else
-            {
-                /* Skip the current command */
-                fprintf(stderr, "%s: %d: %s: command not found\n", fileName, i+1, temp_command);
-                free_array(argv);
-                free(temp_command);
-                free(clean_command);
-                free_array(commands);
-                saveHistory();
-                return (127);
-            }
-        }
-        else if (strcmp(argv[0], "||") == 0)
-        {
-            /* If the previous command failed, execute the current command */
-            if (prev_status != 0)
-            {
-                free_array(argv);
-								free(temp_command);
-                i++;
-                continue;
-            }
-            else
-            {
-                /* Skip the current command */
-                fprintf(stderr, "%s: %d: %s: command not found\n", fileName, i+1, temp_command);
-                free_array(argv);
-                free(temp_command);
-                free(clean_command);
-                free_array(commands);
-                saveHistory();
-                return (127);
-            }
-        }
 
 		pid = fork();
 		if (pid == -1)
@@ -282,41 +229,66 @@ int call_command(char *command, char *fileName)
 			free_array(argv);
 			free_array(commands);
 			free(clean_command);
-			free(temp_command);
 			saveHistory();
 			exit(EXIT_FAILURE); /* terminates the child process if execve fails */
 		}
 		else if (pid == 0)
 		{
 			if (execve(argv[0], argv, environ) == -1)
-			{	
+			{
 				fprintf(stderr, "%s: 1: %s: not found\n", fileName, argv[0]);
 				free_array(commands);
 				free_array(argv);
-				free(temp_command);
 				saveHistory();
 				exit(127);
 			}
 		}
 		else
-		{
+		{	/* parent process */
 			waitpid(pid, &status, 0);
 			if (WIFEXITED(status)) /* Check if the child process exited normally */
+			{
 				status = WEXITSTATUS(status); /* Get the status of the child process */
+                if (i == 0) 				/* Check if it's the first command */
+                {
+                    if (status == 0)	/* If the first command succeeds, don't update ret */
+                        ret = 0;
+                    else			 /* If the first command fails, update ret to the exit status of the failed command */
+                        ret = status;
+                }
+				else if (i > 0 && (commands[i - 1][0] == '|' || commands[i - 1][0] == '&' || commands[i - 1][0] == ';'))
+				{
+					/* Check if the previous operator is pipe or ampersand and the exit status of the previous command is non-zero */
+					if (WIFEXITED(status) && WEXITSTATUS(status) != 0)
+						prev_cmd_failed = 1;
+					else
+						prev_cmd_failed = 0;
+				}
+				else if (strcmp(commands[i - 1], "||") == 0 && prev_cmd_failed)
+				{
+					/* the previous operator was "||", the first command succeeded, and the current command failed
+					 so execute the next command */
+					ret = status;
+					prev_cmd_failed = 0;
+				}
+				else if (i == 0 || (ret != 0 && (commands[i - 1][0] == '|' || commands[i - 1][0] == '&' || commands[i - 1][0] == ';'))) 
+				/* Check if the previous operator is pipe or ampersand and the exit status of the first command is non-zero */
+				{
+					free_array(argv);
+					i++;
+					continue; /* Skip executing the current command */
+				}
+			}
 		}
-		free(temp_command);
 		free_array(argv);
 		i++;
 	}
 	free_array(commands);
-	return (status); /* Return the exit status */
+	return (ret); 			/* Return the exit status of the first command */
 }
 
 void free_commands()
 {
 	if (commands)
 		free_array(commands);
-
-	if (temp_command)
-		free(temp_command);
 }
