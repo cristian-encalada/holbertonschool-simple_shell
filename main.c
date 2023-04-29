@@ -1,5 +1,4 @@
 #include "shell.h"
-
 int last_status;
 
 /**
@@ -11,7 +10,7 @@ int last_status;
 */
 int main(int argc, char **args)
 {
-	char *fileName 	= args[0];
+	char *fileName = args[0];
 	int interactive = 1;
 
 	loadHistory(); /* Load command history */
@@ -19,9 +18,9 @@ int main(int argc, char **args)
 
 	if (args[1])
 	{
-		return ex_filecmd(args[1], fileName);
+		return (ex_filecmd(args[1], fileName));
 	}
-	
+
 	signal(SIGINT, sigint_handler);
 
 	/* Disable Ctrl-C terminal interrupt for interactive shell only */
@@ -32,7 +31,7 @@ int main(int argc, char **args)
 		system("./logo/logo");		/* Executes the Holberton logo executable */
 	else
 		interactive = 0;
-	
+
 	return (read_lines(interactive, fileName));
 }
 
@@ -51,10 +50,10 @@ void sigint_handler(int sig)
 
 /**
  * read_lines - Logic for reading user input.
- * 
+ *
  * @interactive: 1 if interactive mode is enabled, 0 otherwise.
  * @fileName: Name of the executable file.
- * 
+ *
  * Return: 0 on Success, 127 on Error.
 */
 int read_lines(int interactive, char *fileName)
@@ -68,6 +67,7 @@ int read_lines(int interactive, char *fileName)
 		if (interactive)
 		{
 			char *dir = get_current_dir();
+
 			printf("%s$ ", dir);
 			free_current_dir(dir);
 		}
@@ -78,7 +78,6 @@ int read_lines(int interactive, char *fileName)
 			_perror(mem, strerror(errno));
 			exit(1);
 		}
-		
 		chars_read = getline(&buffer, &bufsize, stdin);
 
 		if (chars_read == EOF)
@@ -104,7 +103,7 @@ int read_lines(int interactive, char *fileName)
 		}
 
 		buffer[chars_read - 1] = '\0';
-		if (call_command(buffer, fileName) == 127)	/* execve failed to execute the command */
+		if (call_command(buffer, fileName) == 127)	/* execve failed */
 		{
 			last_status = 127;
 			continue; /* Keep the previous value of last_status */

@@ -20,7 +20,7 @@ char **split_str(char *str, const char *delim)
 		return (NULL);
 
 	for (i = 0; copy[i]; i++)
-	{	
+	{
 		if (copy[i] == ' ')
 			continue;
 		count = 1;
@@ -41,10 +41,10 @@ char **split_str(char *str, const char *delim)
 	}
 
 	/* Check if the string starts with a colon */
-	if (copy[0] == ':') 
+	if (copy[0] == ':')
 	{
 		array[count] = strdup("");
-		if (array[count] == NULL) 
+		if (array[count] == NULL)
 		{
 			free_array(array);
 			free(copy);
@@ -64,7 +64,7 @@ char **split_str(char *str, const char *delim)
 		else
 			break;
 	}
-	
+
 	while (tok != NULL)
 	{
 		len = strlen(tok);

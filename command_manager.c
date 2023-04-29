@@ -1,13 +1,12 @@
 #include "shell.h"
-
 char **commands = NULL;
 
 /**
  * ex_filecmd - Executes all the commands in a file.
- * 
+ *
  * @file: File to read from.
  * @fileName: Executable file.
- * 
+ *
  * Return: Exit status. 0 on Success, 127 on Error.
 */
 int ex_filecmd(char *file, char *fileName)
@@ -70,25 +69,25 @@ int ex_path(char **argv)
 		sprintf(full_path, "%s/%s", dir, *argv);
 		result = access(full_path, X_OK);
 		if (result == 0)
-		{	
+		{
 			pid_t pid = fork();
 
 			if (pid == -1)
-			{	
+			{
 				perror("fork");
 				free(full_path);
 				free_array(argv);
 				return (-1);
 			}
 			else if (pid == 0)
-			{	
+			{
 				execve(full_path, argv, environ);
 				perror("execve");
 				free_array(argv);
 				_exit(127);
 			}
 			else
-			{	
+			{
 				waitpid(pid, NULL, 0);
 				free(full_path);
 				free(path);
@@ -153,7 +152,7 @@ int call_command(char *command, char *fileName)
 	char **argv;
 
 	commands = split_str(clean_command, ";&|");
-	
+
 	if (commands == NULL)
 	{
 		free(command);
@@ -184,9 +183,11 @@ int call_command(char *command, char *fileName)
 		for (j = 1; argv[j] != NULL; j++)
 		{
 			char *var = argv[j];
+
 			if (var[0] == '$')
 			{
 				char *val;
+
 				if (strcmp(var, "$$") == 0)
 				{
 					val = malloc(10);       /* allocate space for pid */
@@ -214,7 +215,7 @@ int call_command(char *command, char *fileName)
 			free_array(argv);
 			i++;
 			continue;
-		}	
+		}
 		/* Check if the cmd is in PATH*/
 		if (ex_path(argv) == 1)
 		{
@@ -224,7 +225,7 @@ int call_command(char *command, char *fileName)
 
 		pid = fork();
 		if (pid == -1)
-		{	
+		{
 			perror("fork");
 			free_array(argv);
 			free_array(commands);
@@ -249,13 +250,13 @@ int call_command(char *command, char *fileName)
 			if (WIFEXITED(status)) /* Check if the child process exited normally */
 			{
 				status = WEXITSTATUS(status); /* Get the status of the child process */
-                if (i == 0) 				/* Check if it's the first command */
-                {
-                    if (status == 0)	/* If the first command succeeds, don't update ret */
-                        ret = 0;
-                    else			 /* If the first command fails, update ret to the exit status of the failed command */
-                        ret = status;
-                }
+				if (i == 0)						/* Check if it's the first command */
+				{
+					if (status == 0)	/* If the first command succeeds, don't update ret */
+						ret = 0;
+					else	/* If first command fails, update ret to the exit status of the failed command */
+						ret = status;
+				}
 				else if (i > 0 && (commands[i - 1][0] == '|' || commands[i - 1][0] == '&' || commands[i - 1][0] == ';'))
 				{
 					/* Check if the previous operator is pipe or ampersand and the exit status of the previous command is non-zero */
@@ -265,14 +266,13 @@ int call_command(char *command, char *fileName)
 						prev_cmd_failed = 0;
 				}
 				else if (strcmp(commands[i - 1], "||") == 0 && prev_cmd_failed)
-				{
-					/* the previous operator was "||", the first command succeeded, and the current command failed
-					 so execute the next command */
+				{	/* if previous operator was "||", the first command succeeded, and the current command failed */
+					/* so, execute the next command */
 					ret = status;
 					prev_cmd_failed = 0;
 				}
-				else if (i == 0 || (ret != 0 && (commands[i - 1][0] == '|' || commands[i - 1][0] == '&' || commands[i - 1][0] == ';'))) 
-				/* Check if the previous operator is pipe or ampersand and the exit status of the first command is non-zero */
+				else if (i == 0 || (ret != 0 && (commands[i - 1][0] == '|' || commands[i - 1][0] == '&' || commands[i - 1][0] == ';')))
+				/* Check if previous operator is | or & and the status of the first command is non-zero */
 				{
 					free_array(argv);
 					i++;
@@ -284,10 +284,10 @@ int call_command(char *command, char *fileName)
 		i++;
 	}
 	free_array(commands);
-	return (ret); 			/* Return the exit status of the first command */
+	return (ret);		/* Return the exit status of the first command */
 }
 
-void free_commands()
+void free_commands(void)
 {
 	if (commands)
 		free_array(commands);

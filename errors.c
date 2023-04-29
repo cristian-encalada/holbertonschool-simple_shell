@@ -23,7 +23,7 @@ void _perror(enum errors err, char *s, ...)
 			fprintf(stderr, "Error: Failed to allocate memory: %s\n", s);
 			break;
 		case cwd:
-			fprintf(stderr, "Error: Failed to get the current working directory: %s\n", s);
+			fprintf(stderr, "Error: Failed getting the working directory: %s\n", s);
 			break;
 		case custom:
 			vfprintf(stderr, s, args);

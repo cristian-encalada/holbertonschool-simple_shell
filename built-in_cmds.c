@@ -57,7 +57,6 @@ void env_cmd(char **args)
 */
 void setenv_cmd(char **args)
 {
-	extern char **environ;
 	char **new_environ;
 	char *env_var, *name, *value;
 	unsigned int i = 0;
@@ -106,7 +105,6 @@ void setenv_cmd(char **args)
 */
 void unsetenv_cmd(char **args)
 {
-	extern char **environ;
 	char *name = args[1];
 	unsigned int found = 0, j, i = 0;
 

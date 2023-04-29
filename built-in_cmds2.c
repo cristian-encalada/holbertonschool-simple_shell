@@ -10,7 +10,7 @@ void cd_cmd(char **args)
 	char *home_dir = getenv("HOME"), *current_dir, *cmd;
 	char *fileName = args[0];
 	char *prevDir = NULL;
-	
+
 	current_dir = get_current_dir();
 	if (!current_dir)
 	{	_perror(custom, "Error: could not get current directory\n");

@@ -13,6 +13,13 @@
 #include <errno.h>
 #include <stdarg.h>
 
+/**
+ * enum errors - Specific errors structure
+ * @cmd: command errors
+ * @mem: memory errors
+ * @cwd: current working directory errors
+ * @custom: custom errors
+ */
 typedef enum errors
 {
 	cmd,
@@ -40,10 +47,10 @@ void print_aliases(void);
 void print_alias(char *arg, char *name, char *value);
 
 /* history_utils.c */
-char **getHistory();
-void printHistory();
-int saveHistory();
-void loadHistory();
+char **getHistory(void);
+void printHistory(void);
+int saveHistory(void);
+void loadHistory(void);
 void addCmdHistory(char *cmd);
 
 /* errors.c */
@@ -69,7 +76,7 @@ int call_command(char *command, char *fileName);
 int ex_filecmd(char *file, char *fileName);
 int ex_builtin(char *command, char **args);
 int ex_path(char **argv);
-void free_commands();
+void free_commands(void);
 
 /* string_utils.c */
 char **split_str(char *str, const char *delim);

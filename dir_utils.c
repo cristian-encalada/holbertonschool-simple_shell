@@ -48,13 +48,13 @@ char *get_current_dir(void)
 void free_current_dir(char *dir)
 {
 	if (dir)
-	  free(dir);
+		free(dir);
 }
 
 /**
  * _getenv - Returns the value of an env var or NULL if it doesn't exists.
  *
- * @name: Name of the environment variable. 
+ * @name: Name of the environment variable.
  * Return: env var or NULL.
 */
 char *_getenv(const char *name)
@@ -65,7 +65,7 @@ char *_getenv(const char *name)
 
 	if (environ == NULL)
 		return (NULL);
-	
+
 	for (; environ[i] != NULL; i++)
 	{
 		dup = strdup(environ[i]);
@@ -74,7 +74,7 @@ char *_getenv(const char *name)
 			return (NULL);
 
 		key = strtok(dup, "=");
-		
+
 		if (!key)
 		{
 			free(dup);
@@ -84,10 +84,10 @@ char *_getenv(const char *name)
 		if (strcmp(name, key) == 0)
 		{
 			free(dup);
-			
+
 			return (environ[i]);
 		}
-		
+
 		free(dup);
 	}
 
@@ -96,6 +96,6 @@ char *_getenv(const char *name)
 
 	if (dup)
 		free(dup);
-	
+
 	return (NULL);
 }

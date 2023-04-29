@@ -1,10 +1,9 @@
 #include "shell.h"
-
 char **history = NULL;
 
 /**
  * getHistory - Get the command history
- * 
+ *
  * Return: Command history or NULL if doesn't exists.
 */
 char **getHistory()
@@ -14,10 +13,10 @@ char **getHistory()
 
 /**
  * printHistory - Print the command history.
- * 
+ *
  * Return: void.
 */
-void printHistory()
+void printHistory(void)
 {
 	unsigned int i = 0;
 
@@ -81,10 +80,10 @@ void addCmdHistory(char *cmd)
 
 /**
  * saveHistory - Save the command history in a file.
- * 
+ *
  * Return: 0 on Success, -1 on Error.
 */
-int saveHistory()
+int saveHistory(void)
 {
 	unsigned int i = 0;
 	FILE *fp = fopen(".simple_shell_history", "w");
@@ -93,13 +92,13 @@ int saveHistory()
 	{
 		return (-1);
 	}
-	
+
 	for (; history[i]; i++)
 	{
 		fputs(history[i], fp);
 		fputc('\n', fp);
 	}
-	
+
 	fclose(fp);
 	free_array(history);
 	return (0);
@@ -107,10 +106,10 @@ int saveHistory()
 
 /**
  * loadHistory - Loads the command history from the file to the variable.
- * 
+ *
  * Return: void.
 */
-void loadHistory()
+void loadHistory(void)
 {
 	char line[1024];
 	char **content = NULL;
@@ -137,13 +136,13 @@ void loadHistory()
 		{
 			continue;
 		}
-		
+
 		new_content = calloc(content_size + 2, sizeof(char *));
 		if (!new_content)
 		{
 			_perror(mem, "Error: Could not allocate memory");
 			fclose(fp);
-			free_array(content); 
+			free_array(content);
 			return;
 		}
 		memcpy(new_content, content, sizeof(char *) * content_size);
@@ -158,11 +157,11 @@ void loadHistory()
 			fclose(fp);
 			return;
 		}
-		
+
 		strcpy(content[content_size], line);
 		content_size++;
 	}
-	
+
 	if (ferror(fp))
 	{
 		_perror(custom, "Error: Could not read history file");
@@ -172,7 +171,7 @@ void loadHistory()
 	}
 
 	if (content == NULL)
-		content = malloc(sizeof(char*) * 1);
+		content = malloc(sizeof(char *) * 1);
 
 	if (content == NULL)
 	{
@@ -180,8 +179,8 @@ void loadHistory()
 		free_array(content);
 		return;
 	}
-	
+
 	fclose(fp);
-	
+
 	history = content;
 }
