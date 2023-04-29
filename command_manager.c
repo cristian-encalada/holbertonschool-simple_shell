@@ -1,6 +1,7 @@
 #include "shell.h"
 
 char **commands = NULL;
+char *temp_command = NULL;
 
 /**
  * ex_filecmd - Executes all the commands in a file.
@@ -93,7 +94,7 @@ int ex_path(char **argv)
 				free(full_path);
 				free(path);
 
-					free_array(argv);
+				free_array(argv);
 				return (1);
 			}
 		}
@@ -151,17 +152,17 @@ int call_command(char *command, char *fileName)
 	int i = 0, status = 0, j = 0, prev_status = 0;
 	pid_t pid;
 	char **argv;
-	char *temp_command; /* hold the original command for printing */
 
 	commands = split_str(clean_command, ";");
 	
 	if (commands == NULL)
+	{
+		free(command);
 		return (status);
+	}
 
 	addCmdHistory(command);
-
 	free(command);
-	
 
 	while (commands[i] != NULL)
 	{
@@ -235,7 +236,7 @@ int call_command(char *command, char *fileName)
             if (prev_status == 0)
             {
                 free_array(argv);
-				free(temp_command);
+								free(temp_command);
                 i++;
                 continue;
             }
@@ -257,7 +258,7 @@ int call_command(char *command, char *fileName)
             if (prev_status != 0)
             {
                 free_array(argv);
-				free(temp_command);
+								free(temp_command);
                 i++;
                 continue;
             }
@@ -303,8 +304,8 @@ int call_command(char *command, char *fileName)
 			if (WIFEXITED(status)) /* Check if the child process exited normally */
 				status = WEXITSTATUS(status); /* Get the status of the child process */
 		}
-		free_array(argv);
 		free(temp_command);
+		free_array(argv);
 		i++;
 	}
 	free_array(commands);
@@ -315,4 +316,7 @@ void free_commands()
 {
 	if (commands)
 		free_array(commands);
+
+	if (temp_command)
+		free(temp_command);
 }

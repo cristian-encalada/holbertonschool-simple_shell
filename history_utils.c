@@ -89,14 +89,10 @@ int saveHistory()
 	unsigned int i = 0;
 	FILE *fp = fopen(".simple_shell_history", "w");
 
-	if (!fp)
+	if (!fp || !history)
 	{
-		_perror(custom, "Error: Could not access history file.\n");
 		return (-1);
 	}
-
-	if (history == NULL)
-		return (-1);
 	
 	for (; history[i]; i++)
 	{

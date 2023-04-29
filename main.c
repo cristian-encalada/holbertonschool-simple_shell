@@ -111,6 +111,6 @@ int read_lines(int interactive, char *fileName)
 		}
 		last_status = 0; /* Command was executed successfully */
 	}
-	
+
 	return (last_status);
 }
