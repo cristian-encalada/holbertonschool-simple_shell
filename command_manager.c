@@ -287,6 +287,10 @@ int call_command(char *command, char *fileName)
 	return (ret);		/* Return the exit status of the first command */
 }
 
+/**
+ * free_commands - Free *commands after exit
+*/
+
 void free_commands(void)
 {
 	if (commands)

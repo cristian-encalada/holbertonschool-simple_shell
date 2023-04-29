@@ -30,6 +30,12 @@ void printHistory(void)
 		printf("%d - %s\n", i, history[i]);
 }
 
+
+/**
+ * addCmdHistory - Add a command to the history.
+ * @cmd: command to be added
+ *
+*/
 void addCmdHistory(char *cmd)
 {
 	unsigned int len = 0;
