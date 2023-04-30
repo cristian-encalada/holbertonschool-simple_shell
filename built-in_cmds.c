@@ -74,7 +74,8 @@ void setenv_cmd(char **args)
 	/* Create a string in the format "MY_VAR=my_value" */
 	env_var = malloc(strlen(name) + strlen(value) + 2);
 	if (env_var == NULL)
-	{	_perror(mem, strerror(errno));
+	{	
+		_perror(mem, strerror(errno));
 		return;
 	}
 	sprintf(env_var, "%s=%s", name, value);
@@ -82,7 +83,8 @@ void setenv_cmd(char **args)
 	{
 		if (strncmp(environ[i], name, strlen(name)) == 0
 					&& (environ[i])[strlen(name)] == '=')
-		{	/* Replace the value of the environment variable*/
+		{	
+			/* Replace the value of the environment variable*/
 			environ[i] = env_var;
 			return;
 		}
@@ -91,7 +93,8 @@ void setenv_cmd(char **args)
 		;
 	new_environ = malloc(sizeof(char *) * (i + 2));
 	if (new_environ == NULL)
-	{	_perror(mem, strerror(errno));
+	{	
+		_perror(mem, strerror(errno));
 		free(env_var);
 		return;
 	}

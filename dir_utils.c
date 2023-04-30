@@ -60,42 +60,35 @@ void free_current_dir(char *dir)
 char *_getenv(const char *name)
 {
 	unsigned int i = 0;
-	char *key;
-	char *dup;
+	char **str;
+	char *val;
 
 	if (environ == NULL)
 		return (NULL);
 
 	for (; environ[i] != NULL; i++)
 	{
-		dup = strdup(environ[i]);
+		str = split_str(environ[i], "=");
 
-		if (!dup)
+		if (!str)
 			return (NULL);
 
-		key = strtok(dup, "=");
-
-		if (!key)
+		if (strcmp(name, str[0]) == 0)
 		{
-			free(dup);
-			return (NULL);
+			val = strdup(str[1]);
+
+			if (!val)
+			{
+				free_array(str);
+				return (NULL);
+			}
+
+			free_array(str);
+			return (val);
 		}
 
-		if (strcmp(name, key) == 0)
-		{
-			free(dup);
-
-			return (environ[i]);
-		}
-
-		free(dup);
+		free_array(str);
 	}
-
-	if (key)
-		free(key);
-
-	if (dup)
-		free(dup);
 
 	return (NULL);
 }

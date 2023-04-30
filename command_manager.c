@@ -62,6 +62,8 @@ int ex_path(char **argv)
 	path = strdup(env);
 	path_copy = path;
 
+	free(env);
+
 	if (!path || !*argv)
 		return (-1);
 	len_cmd = strlen(*argv);

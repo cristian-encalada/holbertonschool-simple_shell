@@ -7,24 +7,25 @@
 */
 void cd_cmd(char **args)
 {
-	char *home_dir = getenv("HOME"), *current_dir, *cmd;
-	char *fileName = args[0];
-	char *prevDir = NULL;
+	char *home_dir = _getenv("HOME"), *current_dir, *prevDir = NULL, *cmd[] = {"setenv", "PWD", NULL, NULL};
 
 	current_dir = get_current_dir();
 	if (!current_dir)
-	{	_perror(custom, "Error: could not get current directory\n");
+	{	
+		_perror(custom, "Error: could not get current directory\n");
 		return;
 	}
 	if (!home_dir)
-	{	_perror(custom, "Error: HOME environment variable not set\n");
+	{	
+		_perror(custom, "Error: HOME environment variable not set\n");
 		free(current_dir);
 		return;
 	}
 	if (!args[1])
 	{
 		if (chdir(home_dir) != 0)
-		{	_perror(custom, "Error: could not change directory to %s\n", home_dir);
+		{	
+			_perror(custom, "Error: could not change directory to %s\n", home_dir);
 			free(current_dir);
 			return;
 		}
@@ -34,11 +35,13 @@ void cd_cmd(char **args)
 		if (strcmp(args[1], "-") == 0)
 		{
 			if (!prevDir)
-			{	_perror(custom, "Error: no previous directory\n");
+			{
+					_perror(custom, "Error: no previous directory\n");
 				return;
 			}
 			if (chdir(prevDir) != 0)
-			{	_perror(custom, "Error: could not change directory to %s\n", prevDir);
+			{	
+				_perror(custom, "Error: could not change directory to %s\n", prevDir);
 				free(current_dir);
 				return;
 			}
@@ -46,30 +49,28 @@ void cd_cmd(char **args)
 		else	/* The argument is a directory */
 		{
 			if (chdir(args[1]) != 0)
-			{	_perror(custom, "Error: could not change directory to %s\n", args[1]);
+			{	
+				_perror(custom, "Error: could not change directory to %s\n", args[1]);
 				free(current_dir);
 				return;
 			}
 			free(prevDir);			/* free previously saved directory */
 			prevDir = strdup(current_dir);
 			if (!prevDir)
-			{	_perror(custom, "Error: could not save previous directory\n");
+			{	
+				_perror(custom, "Error: could not save previous directory\n");
 				free(current_dir);
 				return;
 			}
 		}
 	}
-	cmd = malloc(sizeof(char) * (strlen(current_dir) + 16));
-	if (!cmd)
-	{
-		_perror(mem, strerror(errno));
-		free(current_dir);
-		return;
-	}
-	sprintf(cmd, "setenv PWD %s", current_dir);
-	call_command(cmd, fileName);
+
+	cmd[2] = current_dir;
+
+	setenv_cmd(cmd);
+	
 	free(current_dir);
-	free(cmd);
+	free(home_dir);
 }
 
 /**
