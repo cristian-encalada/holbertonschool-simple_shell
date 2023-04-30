@@ -125,7 +125,6 @@ void loadHistory(void)
 
 	if (!fp)
 	{
-		_perror(custom, "Error: Could not access history file");
 		return;
 	}
 

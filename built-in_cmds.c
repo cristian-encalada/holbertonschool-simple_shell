@@ -1,4 +1,5 @@
 #include "shell.h"
+
 /**
  * clear_cmd - Clear the cmd.
  * @args: Input arguments.
@@ -22,7 +23,8 @@ void exit_cmd(char **args)
 		last_status = atoi(args[1]);
 
 	/* Free the arguments array */
-	free_array(args);
+	if (args)
+		free_array(args);
 
 	/* Saves the command history */
 	saveHistory();

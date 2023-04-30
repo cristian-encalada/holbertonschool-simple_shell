@@ -27,6 +27,7 @@ int ex_filecmd(char *file, char *fileName)
 	while ((read = getline(&line, &len, fp)) != -1)
 	{
 		call_command(line, fileName);
+		line = NULL;
 	}
 
 	if (fclose(fp) != 0)
@@ -35,7 +36,11 @@ int ex_filecmd(char *file, char *fileName)
 		return (127);
 	}
 
-	return (0);
+	/* Saves the command history */
+	saveHistory();
+	free(line);
+
+	return (last_status);
 }
 
 /**
