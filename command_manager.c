@@ -186,20 +186,31 @@ int call_command(char *command, char *fileName)
 
 			if (var[0] == '$')
 			{
-				char *val;
+				char *val = NULL;
 
 				if (strcmp(var, "$$") == 0)
 				{
 					val = malloc(10);       /* allocate space for pid */
-					sprintf(val, "%d", getpid());
+					if (val != NULL)
+						sprintf(val, "%d", getpid());
 				}
 				else if (strcmp(var, "$?") == 0)
 				{
 					val = malloc(10);       /* allocate space for exit status */
-					sprintf(val, "%d", last_status);
+					if (val != NULL)
+						sprintf(val, "%d", last_status);
 				}
 				else
-					val = getenv(var + 1);
+				{
+					char *env_var = getenv(var + 1);
+
+					if (env_var != NULL)
+					{
+						val = malloc(strlen(env_var) + 1);
+						if (val != NULL)
+							strcpy(val, env_var);
+					}
+				}
 				if (val != NULL)
 				{
 					free(argv[j]);         /* free the old argv[j] */
