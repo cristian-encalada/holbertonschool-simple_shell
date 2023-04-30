@@ -1,7 +1,7 @@
 # C Project - Command Line Interpreter (Shell)
 The objective of this project is to create a simple command interpreter taking as a reference the UNIX shell.
 
-A command line interpreter is a program that allows the entering of commands and then executes those commands to the operating system.
+A command line interpreter is a software tool that allows users to type in commands (such as 'ls' to list files or 'cd' to change directories) and then executes those commands within the operating system.
 
 ![HBN_Shell_gif](/logo/Holberton_shell.gif)
 
@@ -355,6 +355,24 @@ Command syntax: `cd [DIRECTORY]`
 If no argument is given to `cd` the command must be interpreted like `cd $HOME`
 You have to handle the command `cd -`
 You have to update the environment variable `PWD` when you change directory
+Example:
+```
+/root/holbertonschool-simple_shell$ pwd
+/root/holbertonschool-simple_shell
+/root/holbertonschool-simple_shell$ cd
+/root$ ls
+emacs  git  holbertonschool-simple_shell  new_school  school  school_is_amazing  so_cool  vi
+/root$ cd holbertonschool-simple_shell
+/root/holbertonschool-simple_shell$ ls
+alias_utils.c  built-in_cmds2.c  cmds		    dir_utils.c  help		  hsh	main.c		    README.md  string_utils.c
+AUTHORS        built-in_cmds.c	 command_manager.c  errors.c	 history_utils.c  logo	man_1_simple_shell  shell.h
+/root/holbertonschool-simple_shell$ cd logo
+/root/holbertonschool-simple_shell/logo$ cd ..
+/root/holbertonschool-simple_shell$ cd ..
+/root$ cd /
+/$ exit
+root@daa1255aa733:~/holbertonschool-simple_shell# 
+```
 ### 10. Handle the commands separator `;`
 Requirements:
 Handle the commands separator ;
@@ -446,6 +464,10 @@ AUTHORS        built-in_cmds.c	 command_manager.c  errors.c	 history_utils.c  lo
 18823 pts/203  00:00:00 bash
 18837 pts/203  00:00:00 hsh
 18875 pts/203  00:00:00 ps
+/root/holbertonschool-simple_shell$ echo $PATH
+/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+/root/holbertonschool-simple_shell$ echo $HOME
+/root
 ```
 ### 14. Handle comments (`#`)
 Requirements:
@@ -528,6 +550,69 @@ Usage: `simple_shell [filename]`
 - The file contains all the commands that your shell should run before exiting
 - The file should contain one command per line
 - In this mode, the shell should not print a prompt and should not read from `stdin`
+Example:
+root@daa1255aa733:~/holbertonschool-simple_shell# cat cmds
+ls
+ls
+ls
+ls -la
+ls -la
+lsroot@daa1255aa733:~/holbertonschool-simple_shell# ./hsh cmds
+alias_utils.c  built-in_cmds2.c  cmds		    dir_utils.c  help		  hsh	main.c		    README.md  string_utils.c
+AUTHORS        built-in_cmds.c	 command_manager.c  errors.c	 history_utils.c  logo	man_1_simple_shell  shell.h
+alias_utils.c  built-in_cmds2.c  cmds		    dir_utils.c  help		  hsh	main.c		    README.md  string_utils.c
+AUTHORS        built-in_cmds.c	 command_manager.c  errors.c	 history_utils.c  logo	man_1_simple_shell  shell.h
+alias_utils.c  built-in_cmds2.c  cmds		    dir_utils.c  help		  hsh	main.c		    README.md  string_utils.c
+AUTHORS        built-in_cmds.c	 command_manager.c  errors.c	 history_utils.c  logo	man_1_simple_shell  shell.h
+total 160
+drwxr-xr-x 5 root root  4096 Apr 30 14:39 .
+drwx------ 1 root root  4096 Apr 30 14:39 ..
+-rw-r--r-- 1 root root    13 Apr 30 14:31 .aliases
+-rw-r--r-- 1 root root  2201 Apr 30 14:31 alias_utils.c
+-rw-r--r-- 1 root root   118 Apr 30 14:31 AUTHORS
+-rw-r--r-- 1 root root  3235 Apr 30 14:31 built-in_cmds2.c
+-rw-r--r-- 1 root root  2771 Apr 30 14:31 built-in_cmds.c
+-rw-r--r-- 1 root root   324 Apr 30 14:39 cmds
+-rw-r--r-- 1 root root  6538 Apr 30 14:31 command_manager.c
+-rw-r--r-- 1 root root  1426 Apr 30 14:31 dir_utils.c
+-rw-r--r-- 1 root root   613 Apr 30 14:31 errors.c
+drwxr-xr-x 8 root root   163 Apr 30 14:31 .git
+-rw-r--r-- 1 root root    40 Apr 30 14:31 .gitignore
+drwxr-xr-x 2 root root   167 Apr 30 14:31 help
+-rw-r--r-- 1 root root  3117 Apr 30 14:31 history_utils.c
+-rwxr-xr-x 1 root root 61256 Apr 30 14:32 hsh
+drwxr-xr-x 2 root root   167 Apr 30 14:31 logo
+-rw-r--r-- 1 root root  2300 Apr 30 14:31 main.c
+-rw-r--r-- 1 root root  1844 Apr 30 14:31 man_1_simple_shell
+-rw-r--r-- 1 root root 23111 Apr 30 14:31 README.md
+-rw-r--r-- 1 root root  1997 Apr 30 14:31 shell.h
+-rw-r--r-- 1 root root  2228 Apr 30 14:38 .simple_shell_history
+-rw-r--r-- 1 root root  2968 Apr 30 14:31 string_utils.c
+total 160
+drwxr-xr-x 5 root root  4096 Apr 30 14:39 .
+drwx------ 1 root root  4096 Apr 30 14:39 ..
+-rw-r--r-- 1 root root    13 Apr 30 14:31 .aliases
+-rw-r--r-- 1 root root  2201 Apr 30 14:31 alias_utils.c
+-rw-r--r-- 1 root root   118 Apr 30 14:31 AUTHORS
+-rw-r--r-- 1 root root  3235 Apr 30 14:31 built-in_cmds2.c
+-rw-r--r-- 1 root root  2771 Apr 30 14:31 built-in_cmds.c
+-rw-r--r-- 1 root root   324 Apr 30 14:39 cmds
+-rw-r--r-- 1 root root  6538 Apr 30 14:31 command_manager.c
+-rw-r--r-- 1 root root  1426 Apr 30 14:31 dir_utils.c
+-rw-r--r-- 1 root root   613 Apr 30 14:31 errors.c
+drwxr-xr-x 8 root root   163 Apr 30 14:31 .git
+-rw-r--r-- 1 root root    40 Apr 30 14:31 .gitignore
+drwxr-xr-x 2 root root   167 Apr 30 14:31 help
+-rw-r--r-- 1 root root  3117 Apr 30 14:31 history_utils.c
+-rwxr-xr-x 1 root root 61256 Apr 30 14:32 hsh
+drwxr-xr-x 2 root root   167 Apr 30 14:31 logo
+-rw-r--r-- 1 root root  2300 Apr 30 14:31 main.c
+-rw-r--r-- 1 root root  1844 Apr 30 14:31 man_1_simple_shell
+-rw-r--r-- 1 root root 23111 Apr 30 14:31 README.md
+-rw-r--r-- 1 root root  1997 Apr 30 14:31 shell.h
+-rw-r--r-- 1 root root  2228 Apr 30 14:38 .simple_shell_history
+-rw-r--r-- 1 root root  2968 Apr 30 14:31 string_utils.c
+root@daa1255aa733:~/holbertonschool-simple_shell#
 ---------------------------------------------------------------------------------
 
 ## Testing
