@@ -1,0 +1,60 @@
+.\" Manual page for _Holberton_shell project
+.\" Last update: 29-04-2023
+.TH _SHELL 1 "29 Apr 2023" "version 1.0" "_simple_shell man page"
+.SH NAME
+hsh - Holberton Simple SHell
+.SH SYNOPSIS
+hsh [options] [command_string | file]
+.SH DESCRIPTION
+hsh is a simple command interpreter taking as a reference the UNIX shell.
+.TP
+A command line interpreter is a program that allows the entering of commands and then executes those commands to the operating system.
+.SH INSTALLATION
+To use this Simple Shell (called hsh) follow these steps:
+.TP
+1. Clone this repository to your local environment.
+.TP
+git clone https://github.com/Hiojam/holbertonschool-simple_shell.git
+.TP
+2. Go to the holbertonschool-simple_shell directory.
+.TP
+cd holbertonschool-simple_shell/
+.TP
+3. Compile the C source code using this command:
+.TP
+$ gcc -g -Wall -Werror -Wextra -pedantic -std=gnu89 *.c -o hsh
+.SH NORMAL COMMANDS
+It is possible to execute any command present in the directory /usr/bin/
+.TP
+For example:
+.TP
+pwd - print name of current/working directory
+.TP
+/root/holbertonschool-simple_shell$ pwd
+.TP
+/root/holbertonschool-simple_shell
+
+.SH BUILT-IN COMMANDS
+A built-in command is a command or function that is part of the shell itself. The command is "built-in" to the shell program — no external program is necessary to run the command, and a new process does not need to be created.
+.TP
+The following built-in commands are supported:
+.TP
+clear: Clear the terminal screen
+.TP
+cd:  Change the working directory
+.TP
+alias: Define or display aliases
+.TP
+history: Log the hsh command history
+.TP
+exit: Exit from the shell
+.TP
+help: Show information about built-int commands
+.TP
+env: print environment variables
+.TP
+setenv: Change or add an environment variable
+.TP
+unsetenv: Unset values of environment variables
+.SH AUTHORS
+Cristian Encalada - Hiojam Rodríguez
