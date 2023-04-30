@@ -551,6 +551,7 @@ Usage: `simple_shell [filename]`
 - The file should contain one command per line
 - In this mode, the shell should not print a prompt and should not read from `stdin`
 Example:
+```
 root@daa1255aa733:~/holbertonschool-simple_shell# cat cmds
 ls
 ls
@@ -613,6 +614,7 @@ drwxr-xr-x 2 root root   167 Apr 30 14:31 logo
 -rw-r--r-- 1 root root  2228 Apr 30 14:38 .simple_shell_history
 -rw-r--r-- 1 root root  2968 Apr 30 14:31 string_utils.c
 root@daa1255aa733:~/holbertonschool-simple_shell#
+```
 ---------------------------------------------------------------------------------
 
 ## Testing
