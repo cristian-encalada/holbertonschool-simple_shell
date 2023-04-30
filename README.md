@@ -3,6 +3,8 @@ The objective of this project is to create a simple command interpreter taking a
 
 A command line interpreter is a program that allows the entering of commands and then executes those commands to the operating system.
 
+![HBN_Shell_gif](/logo/Holberton_shell.gif)
+
 ## Table of contents
 
    * [Table of contents](#table-of-contents)
@@ -300,7 +302,21 @@ Requirements for unsetenv:
 - Remove an environment variable
 - Command syntax: `unsetenv VARIABLE`
 - Should print something on stderr on failure
-
+```
+/root/holbertonschool-simple_shell$ setenv TEST1 VALUE1 
+/root/holbertonschool-simple_shell$ setenv TEST2 VALUE2
+/root/holbertonschool-simple_shell$ echo $TEST1
+VALUE1
+/root/holbertonschool-simple_shell$ echo $TEST2
+VALUE2
+/root/holbertonschool-simple_shell$ unsetenv TEST1
+/root/holbertonschool-simple_shell$ echo TEST1
+TEST1
+/root/holbertonschool-simple_shell$ unsetenv TEST9
+Error: Variable TEST9 not found
+/root/holbertonschool-simple_shell$ setenv TEST5
+Error: Not valid sintax. Use: setenv (var) (value)
+```
 ### 9. Implement the builtin command `cd`
 Implement the builtin command `cd`:
 Requirements:
@@ -359,6 +375,24 @@ Usage: `alias [name[='value'] ...]`
   - alias: Prints a list of all aliases, one per line, in the form `name='value'`
   - `alias name [name2 ...]`: Prints the aliases `name`, `name2`, etc 1 per line, in the form `name='value'`
   - `alias name='value' [...]`: Defines an alias for each `name` whose `value` is given. If `name` is already an alias, replaces its value with value
+Example:
+```
+/root/holbertonschool-simple_shell$ alias
+hola='hola2'
+ls='list'
+/root/holbertonschool-simple_shell$ alias list=ls
+/root/holbertonschool-simple_shell$ alias
+hola='hola2'
+ls='list'
+list='ls'
+/root/holbertonschool-simple_shell$ alias invalid
+Error: Alias not found.
+/root/holbertonschool-simple_shell$ alias list=pwd
+/root/holbertonschool-simple_shell$ alias
+hola='hola2'
+ls='list'
+list='pwd'
+```
 ### 13. Handle variables replacement
 Requirements:
 - Handle variables replacement
@@ -425,6 +459,38 @@ Requirements:
 - The `history` built-in displays the history list, one command by line, preceded with line numbers (starting at `0`)
 - On `exit`, write the entire history, without line numbers, to a file named `.simple_shell_history` in the directory `$HOME`
 - When the shell starts, read the file `.simple_shell_history` in the directory `$HOME` if it exists, and set the first line number to the total number of lines in the file modulo `4096`
+```
+/root/holbertonschool-simple_shell$ ls
+alias_utils.c  built-in_cmds2.c  cmds		    dir_utils.c  help		  hsh	main.c	   shell.h
+AUTHORS        built-in_cmds.c	 command_manager.c  errors.c	 history_utils.c  logo	README.md  string_utils.c
+/root/holbertonschool-simple_shell$ ls -la
+total 152
+drwxr-xr-x 5 root root  4096 Apr 29 17:35 .
+drwx------ 1 root root  4096 Apr 29 14:43 ..
+-rw-r--r-- 1 root root    34 Apr 29 17:35 .aliases
+-rw-r--r-- 1 root root  2201 Apr 29 14:43 alias_utils.c
+-rw-r--r-- 1 root root   118 Apr 29 14:43 AUTHORS
+-rw-r--r-- 1 root root  3367 Apr 29 14:43 built-in_cmds2.c
+-rw-r--r-- 1 root root  2748 Apr 29 14:43 built-in_cmds.c
+/root/holbertonschool-simple_shell$ pwd
+/root/holbertonschool-simple_shell
+/root/holbertonschool-simple_shell$ echo $$
+19392
+/root/holbertonschool-simple_shell$ echo $PATH
+/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+/root/holbertonschool-simple_shell$ exit
+
+root@daa1255aa733:~/holbertonschool-simple_shell# cat .simple_shell_history 
+ls
+ls -la
+ls
+ls -la
+pwd
+echo $$
+echo $PATH
+cat .simple_shell_history
+exit
+```
 ### 17. Handle files as input
 Requirements:
 Usage: `simple_shell [filename]`
