@@ -10,11 +10,12 @@ A command line interpreter is a program that allows the entering of commands and
    * [Table of contents](#table-of-contents)
    * [Requirements](#requirements)
    * [Allowed functions and system calls](#list-of-allowed-functions-and-system-calls)
-   * [Compilation](#compilation)
    * [Installation](#installation)
+   * [Valgrind checks](#valgrind-checks)
    * [Mandatory Tasks](#mandatory-tasks)
    * [Advanced Tasks](#advanced-tasks)
    * [Testing](#testing)
+   * [Reference Manual](#reference-manual)
    * [Authors](#authors)
 
 ---------------------------------------------------------------------------------
@@ -89,12 +90,6 @@ $
 - `wait4` (man 2 wait4)
 - `write` (man 2 write)
 
-## Compilation
-The shell will be compiled this way:
-
-```
-gcc -Wall -Werror -Wextra -pedantic -std=gnu89 *.c -o hsh
-```
 ---------------------------------------------------------------------------------
 
 ## Installation
@@ -111,6 +106,41 @@ $ cd holbertonschool-simple_shell/
 3. Compile the C source code using this command:
 ```
 $ gcc -g -Wall -Werror -Wextra -pedantic -std=gnu89 *.c -o hsh
+```
+---------------------------------------------------------------------------------
+## Valgrind checks
+
+In order to have a more detailed Valgrind output trying to find memory leaks, use this command at the moment of compile the C code:
+
+```
+gcc -g -Wall -Werror -Wextra -pedantic -std=gnu89 *.c -o hsh
+```
+After that, you can execute Valgrind using the following flags (./hsh at the end is the name of the executable file)
+```
+valgrind -s --show-reachable=yes --leak-check=full ./hsh
+```
+The output should be similar to this:
+```
+==5668== Memcheck, a memory error detector
+==5668== Copyright (C) 2002-2022, and GNU GPL'd, by Julian Seward et al.
+==5668== Using Valgrind-3.20.0 and LibVEX; rerun with -h for copyright info
+==5668== Command: ./hsh
+==5668== 
+/root/holbertonschool-simple_shell$ ls
+alias_utils.c  built-in_cmds2.c  cmds		    dir_utils.c  help		  hsh	main.c		    README.md  string_utils.c
+AUTHORS        built-in_cmds.c	 command_manager.c  errors.c	 history_utils.c  logo	man_1_simple_shell  shell.h
+/root/holbertonschool-simple_shell$$ pwd
+/root/holbertonschool-simple_shell$
+/root/holbertonschool-simple_shell$$ exit
+==5921== 
+==5921== HEAP SUMMARY:
+==5921==     in use at exit: 0 bytes in 0 blocks
+==5921==   total heap usage: 221 allocs, 221 frees, 26,819 bytes allocated
+==5921== 
+==5921== All heap blocks were freed -- no leaks are possible
+==5921== 
+==5921== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+
 ```
 ---------------------------------------------------------------------------------
 
@@ -524,6 +554,17 @@ hsh main.c shell.c test_ls_2
 hsh main.c shell.c test_ls_2
 $
 ```
+---------------------------------------------------------------------------------
+## Reference Manual
+To execute the reference manual, run the command:
+```
+man ./man_1_simple_shell
+```
+The view should be this way:
+<br>
+![man_page1 _shell](/logo/man_simple_shell_p1.png)
+<br>
+![man_page2 _shell](/logo/man_simple_shell_p2.png)
 ---------------------------------------------------------------------------------
 
 ## Authors
